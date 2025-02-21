@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { useAppDispatch } from "@/redux/hooks";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { verifyToken } from "@/utils/verifyToken";
 
 // Form types
 type LoginFormData = {
@@ -23,6 +26,7 @@ type RegisterFormData = {
 export default function AuthPages() {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   // Login form
   const {
@@ -39,12 +43,8 @@ export default function AuthPages() {
     watch,
   } = useForm<RegisterFormData>();
 
-  const [login, { data, error }] = useLoginMutation();
+  const [login, { error }] = useLoginMutation();
 
-  if (data) {
-    console.log(data);
-  }
-  
   if (error) {
     console.log(error);
   }
@@ -52,9 +52,11 @@ export default function AuthPages() {
   const onLoginSubmit = async (data: LoginFormData) => {
     try {
       setIsLoading(true);
-
       // post data to login API
-      login(data);
+      const { data: response } = await login(data).unwrap();
+      const user = verifyToken(response.token);
+
+      dispatch(setUser({ user, token: response.token }));
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -78,7 +80,7 @@ export default function AuthPages() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -90,7 +92,7 @@ export default function AuthPages() {
             <button
               type="button"
               onClick={() => setIsLogin(true)}
-              className={`flex-1 p-4 text-center font-medium transition-colors ${
+              className={`flex-1 cursor-pointer p-4 text-center font-medium transition-colors ${
                 isLogin
                   ? "bg-gray-100 text-gray-900"
                   : "text-gray-500 hover:text-gray-700"
@@ -101,7 +103,7 @@ export default function AuthPages() {
             <button
               type="button"
               onClick={() => setIsLogin(false)}
-              className={`flex-1 p-4 text-center font-medium transition-colors ${
+              className={`flex-1 cursor-pointer p-4 text-center font-medium transition-colors ${
                 !isLogin
                   ? "bg-gray-100 text-gray-900"
                   : "text-gray-500 hover:text-gray-700"
