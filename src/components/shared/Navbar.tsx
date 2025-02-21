@@ -40,7 +40,8 @@ export default function Navbar() {
             <Button variant="ghost" size="icon">
               <ShoppingCart className="h-5 w-5" />
               <span className="sr-only">Shopping cart</span>
-            </Button>
+            </Button>{" "}
+            <Button>Login</Button>
           </div>
 
           {/* Mobile menu button */}
@@ -66,6 +67,7 @@ export default function Navbar() {
               {Navlinks.map((link, idx) => (
                 <NavLink
                   to={link.href}
+                  key={idx}
                   className={({ isActive }) =>
                     !isActive
                       ? "block px-3 py-2 text-gray-700 hover:text-primary"
@@ -75,30 +77,6 @@ export default function Navbar() {
                   {link.name}
                 </NavLink>
               ))}
-              <a
-                href="/"
-                className="block px-3 py-2 text-gray-700 hover:text-primary"
-              >
-                Home
-              </a>
-              <a
-                href="/products"
-                className="block px-3 py-2 text-gray-700 hover:text-primary"
-              >
-                Products
-              </a>
-              <a
-                href="/about"
-                className="block px-3 py-2 text-gray-700 hover:text-primary"
-              >
-                About
-              </a>
-              <a
-                href="/contact"
-                className="block px-3 py-2 text-gray-700 hover:text-primary"
-              >
-                Contact
-              </a>
             </div>
           </div>
         )}
