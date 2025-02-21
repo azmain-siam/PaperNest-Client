@@ -1,5 +1,6 @@
 import App from "@/App";
 import AboutPage from "@/pages/About";
+import AuthPages from "@/pages/AuthPages";
 import CartPage from "@/pages/CartPage";
 import Dashboard from "@/pages/Dashboard";
 import Home from "@/pages/Home";
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartPage />,
+      },
+      {
+        path: "/auth",
+        element: <AuthPages />,
       },
     ],
   },

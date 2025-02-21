@@ -49,7 +49,7 @@ export default function BannerSlider() {
             <img
               src={slide.image || "/placeholder.svg"}
               alt={slide.title}
-              className="w-full h-[400px] object-cover"
+              className="w-full h-[550px] object-cover"
             />
             <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
               <div className="text-center text-white">
@@ -64,7 +64,7 @@ export default function BannerSlider() {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white"
+        className="absolute cursor-pointer left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white"
         onClick={prevSlide}
       >
         <ChevronLeft className="h-6 w-6" />
@@ -73,7 +73,7 @@ export default function BannerSlider() {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white"
+        className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white"
         onClick={nextSlide}
       >
         <ChevronRight className="h-6 w-6" />
