@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
 
 // Form types
 type LoginFormData = {
@@ -38,16 +39,24 @@ export default function AuthPages() {
     watch,
   } = useForm<RegisterFormData>();
 
+  const [login, { data, error }] = useLoginMutation();
+
+  if (data) {
+    console.log(data);
+  }
+  
+  if (error) {
+    console.log(error);
+  }
+
   const onLoginSubmit = async (data: LoginFormData) => {
     try {
       setIsLoading(true);
-      // Replace with your login API call
-      console.log("Login data:", data);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      // Handle successful login (e.g., redirect, set auth state, etc.)
+
+      // post data to login API
+      login(data);
     } catch (error) {
       console.error("Login error:", error);
-      // Handle login error (show error message, etc.)
     } finally {
       setIsLoading(false);
     }
@@ -158,7 +167,7 @@ export default function AuthPages() {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-colors"
+                    className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-colors cursor-pointer"
                     disabled={isLoading}
                   >
                     {isLoading ? (
@@ -272,7 +281,7 @@ export default function AuthPages() {
 
                   <Button
                     type="submit"
-                    className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-colors"
+                    className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-colors cursor-pointer"
                     disabled={isLoading}
                   >
                     {isLoading ? (

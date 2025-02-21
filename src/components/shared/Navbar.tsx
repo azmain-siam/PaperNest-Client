@@ -41,7 +41,9 @@ export default function Navbar() {
               <ShoppingCart className="h-5 w-5" />
               <span className="sr-only">Shopping cart</span>
             </Button>{" "}
-            <Button>Login</Button>
+            <Link to={"/auth"}>
+              <Button className="cursor-pointer">Login</Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
