@@ -21,12 +21,20 @@ interface ILink {
   href: string;
 }
 
+interface IUser {
+  name: string;
+  email: string;
+  role: string;
+  iat: number;
+  exp: number;
+}
+
 export default function Navbar() {
   const { setTheme } = useTheme();
   const dispatch = useAppDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const user = useAppSelector(useCurrentUser);
-
+  const user = useAppSelector(useCurrentUser) as IUser | null;
+  // console.log(user);
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -87,9 +95,9 @@ export default function Navbar() {
                 >
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1.5">
-                      <p className="font-medium leading-none">John Doe</p>
+                      <p className="font-medium leading-none">{user.name}</p>
                       <p className="text-sm leading-none text-muted-foreground">
-                        john.doe@example.com
+                        {user.email}
                       </p>
                     </div>
                   </DropdownMenuLabel>

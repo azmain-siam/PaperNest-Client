@@ -1,76 +1,88 @@
-"use client";
-
+import placeholder from "@/assets/images/card-placeholder.jpeg";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus, Star, Truck, RefreshCw, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
+// import { cn } from "@/lib/utils";
 import { useParams } from "react-router-dom";
-import { useGetProductByIdQuery } from "@/redux/features/products/productsApi";
+import {
+  useGetAllProductsQuery,
+  useGetProductByIdQuery,
+} from "@/redux/features/products/productsApi";
+import { IProduct } from "./AllProducts";
+// import { u } from "node_modules/framer-motion/dist/types.d-6pKw1mTI";
+import ProductCard from "@/components/productsPage/ProductCard";
 
-interface ProductImage {
-  id: number;
-  url: string;
-  alt: string;
-}
+// interface ProductImage {
+//   id: number;
+//   url: string;
+//   alt: string;
+// }
 
-const productImages: ProductImage[] = [
-  {
-    id: 1,
-    url: "/placeholder.svg?height=600&width=600",
-    alt: "Product image 1",
-  },
-  {
-    id: 2,
-    url: "/placeholder.svg?height=600&width=600",
-    alt: "Product image 2",
-  },
-  {
-    id: 3,
-    url: "/placeholder.svg?height=600&width=600",
-    alt: "Product image 3",
-  },
-  {
-    id: 4,
-    url: "/placeholder.svg?height=600&width=600",
-    alt: "Product image 4",
-  },
-];
+// const productImages: ProductImage[] = [
+//   {
+//     id: 1,
+//     url: "/placeholder.svg?height=600&width=600",
+//     alt: "Product image 1",
+//   },
+//   {
+//     id: 2,
+//     url: "/placeholder.svg?height=600&width=600",
+//     alt: "Product image 2",
+//   },
+//   {
+//     id: 3,
+//     url: "/placeholder.svg?height=600&width=600",
+//     alt: "Product image 3",
+//   },
+//   {
+//     id: 4,
+//     url: "/placeholder.svg?height=600&width=600",
+//     alt: "Product image 4",
+//   },
+// ];
 
-const relatedProducts = [
-  {
-    id: 1,
-    name: "Premium Notebook",
-    price: 12.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-  {
-    id: 2,
-    name: "Fountain Pen Set",
-    price: 24.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-  {
-    id: 3,
-    name: "Colored Pencils",
-    price: 9.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-  {
-    id: 4,
-    name: "Desk Organizer",
-    price: 19.99,
-    image: "/placeholder.svg?height=200&width=200",
-  },
-];
+// const relatedProducts = [
+//   {
+//     id: 1,
+//     name: "Premium Notebook",
+//     price: 12.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+//   {
+//     id: 2,
+//     name: "Fountain Pen Set",
+//     price: 24.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+//   {
+//     id: 3,
+//     name: "Colored Pencils",
+//     price: 9.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+//   {
+//     id: 4,
+//     name: "Desk Organizer",
+//     price: 19.99,
+//     image: "/placeholder.svg?height=200&width=200",
+//   },
+// ];
 
 const ProductDetails = () => {
   const { productId } = useParams();
-  console.log(productId);
-  const { data } = useGetProductByIdQuery(productId);
-  console.log(data);
-  const [selectedImage, setSelectedImage] = useState(productImages[0]);
+  const { data, isLoading } = useGetProductByIdQuery(productId);
+  const { data: response, isLoading: isProductsLoading } =
+    useGetAllProductsQuery(undefined);
+  console.log(response);
+  const products: IProduct[] = response?.data;
+  console.log(products, "products");
+  const product: IProduct = data?.data;
+  // const { data: product }:{ data: IProduct } = data;
+  // console.log(product);
+  // const { data: product }: { data: IProduct } = data;
+  // const [selectedImage, setSelectedImage] = useState(productImages[0]);
   const [quantity, setQuantity] = useState(1);
 
   const decreaseQuantity = () => {
@@ -80,6 +92,10 @@ const ProductDetails = () => {
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
+
+  if (isLoading || isProductsLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -92,16 +108,19 @@ const ProductDetails = () => {
         >
           <div className="aspect-square overflow-hidden rounded-lg border bg-gray-100">
             <motion.img
-              key={selectedImage.id}
+              // key={selectedImage.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              src={selectedImage.url}
-              alt={selectedImage.alt}
+              src={
+                // selectedImage.url ||
+                placeholder
+              }
+              alt={"selectedImage.alt"}
               className="h-full w-full object-cover object-center"
             />
           </div>
-          <div className="grid grid-cols-4 gap-4">
+          {/* <div className="grid grid-cols-4 gap-4">
             {productImages.map((image) => (
               <motion.button
                 key={image.id}
@@ -120,7 +139,7 @@ const ProductDetails = () => {
                 />
               </motion.button>
             ))}
-          </div>
+          </div> */}
         </motion.div>
 
         {/* Product Info */}
@@ -130,7 +149,7 @@ const ProductDetails = () => {
           className="space-y-6"
         >
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold">Premium Leather Journal</h1>
+            <h1 className="text-3xl font-bold">{product.name}</h1>
             <div className="flex items-center space-x-2">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
@@ -142,18 +161,15 @@ const ProductDetails = () => {
               </div>
               <span className="text-sm text-gray-500">(124 reviews)</span>
             </div>
-            <div className="text-2xl font-bold text-primary">$29.99</div>
+            <div className="text-2xl font-bold text-primary">
+              ${product.price}
+            </div>
           </div>
 
-          <p className="text-gray-600">
-            Handcrafted from genuine leather, this premium journal features 240
-            pages of high-quality paper perfect for writing, sketching, and
-            planning. The classic design includes a ribbon bookmark and elastic
-            closure.
-          </p>
+          <p className="text-gray-600">{product.description}</p>
 
           {/* Color Selection */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <h3 className="font-medium">Color</h3>
             <div className="flex space-x-2">
               {["bg-brown-500", "bg-black", "bg-blue-700"].map((color) => (
@@ -165,7 +181,7 @@ const ProductDetails = () => {
                 />
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Quantity Selector */}
           <div className="space-y-2">
@@ -302,24 +318,8 @@ const ProductDetails = () => {
       <div className="mt-16">
         <h2 className="text-2xl font-bold mb-8">Related Products</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {relatedProducts.map((product) => (
-            <motion.div
-              key={product.id}
-              whileHover={{ y: -5 }}
-              className="group"
-            >
-              <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-                <img
-                  src={product.image || "/placeholder.svg"}
-                  alt={product.name}
-                  className="h-full w-full object-cover object-center transition-transform group-hover:scale-105"
-                />
-              </div>
-              <h3 className="mt-4 text-sm font-medium">{product.name}</h3>
-              <p className="mt-1 text-sm font-medium text-primary">
-                ${product.price}
-              </p>
-            </motion.div>
+          {products.slice(0,4).map((product: IProduct) => (
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
       </div>
