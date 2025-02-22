@@ -77,7 +77,7 @@ const FilterSidebar = ({
             </Select>
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col space-y-4">
             <Label>
               Price Range (${priceRange[0]} - ${priceRange[1]})
             </Label>

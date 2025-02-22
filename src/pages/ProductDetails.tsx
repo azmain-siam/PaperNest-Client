@@ -6,6 +6,8 @@ import { Minus, Plus, Star, Truck, RefreshCw, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { useParams } from "react-router-dom";
+import { useGetProductByIdQuery } from "@/redux/features/products/productsApi";
 
 interface ProductImage {
   id: number;
@@ -63,7 +65,11 @@ const relatedProducts = [
   },
 ];
 
-export default function ProductDetails() {
+const ProductDetails = () => {
+  const { productId } = useParams();
+  console.log(productId);
+  const { data } = useGetProductByIdQuery(productId);
+  console.log(data);
   const [selectedImage, setSelectedImage] = useState(productImages[0]);
   const [quantity, setQuantity] = useState(1);
 
@@ -319,4 +325,6 @@ export default function ProductDetails() {
       </div>
     </div>
   );
-}
+};
+
+export default ProductDetails;
