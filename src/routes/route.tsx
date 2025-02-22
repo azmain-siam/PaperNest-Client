@@ -1,4 +1,5 @@
 import App from "@/App";
+import ProtectedRoute from "@/layouts/ProtectedRoute";
 import AboutPage from "@/pages/About";
 import AuthPages from "@/pages/AuthPages";
 import CartPage from "@/pages/CartPage";
@@ -26,7 +27,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: <CartPage />,
+        element: (
+          <ProtectedRoute>
+            <CartPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/auth",

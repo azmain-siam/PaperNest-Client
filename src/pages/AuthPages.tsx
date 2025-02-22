@@ -1,14 +1,19 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLoginMutation } from "@/redux/features/auth/authApi";
+import {
+  useLoginMutation,
+  useRegisterMutation,
+} from "@/redux/features/auth/authApi";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { verifyToken } from "@/utils/verifyToken";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 // Form types
 type LoginFormData = {
@@ -27,6 +32,7 @@ export default function AuthPages() {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // Login form
   const {
@@ -40,23 +46,28 @@ export default function AuthPages() {
     register: registerSignup,
     handleSubmit: handleRegisterSubmit,
     formState: { errors: registerErrors },
-    watch,
+    // watch,
   } = useForm<RegisterFormData>();
 
   const [login, { error }] = useLoginMutation();
+  const [register] = useRegisterMutation();
+  // console.log("registerError", registerError);
 
   if (error) {
     console.log(error);
   }
 
-  const onLoginSubmit = async (data: LoginFormData) => {
+  const onLoginSubmit = async (data: FieldValues) => {
     try {
       setIsLoading(true);
+
       // post data to login API
       const { data: response } = await login(data).unwrap();
       const user = verifyToken(response.token);
 
       dispatch(setUser({ user, token: response.token }));
+      toast.success("Login Successful!", { duration: 3000 });
+      navigate("/");
     } catch (error) {
       console.error("Login error:", error);
     } finally {
@@ -67,13 +78,20 @@ export default function AuthPages() {
   const onRegisterSubmit = async (data: RegisterFormData) => {
     try {
       setIsLoading(true);
-      // Replace with your registration API call
+
       console.log("Register data:", data);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      // Handle successful registration (e.g., redirect, set auth state, etc.)
+      // post data to registration API
+      const res = await register(data);
+      // console.log(res);
+
+      if (res.error) {
+        console.log("res.data.message");
+      }
+      if (res.data) {
+        console.log("user registerd");
+      }
     } catch (error) {
       console.error("Registration error:", error);
-      // Handle registration error (show error message, etc.)
     } finally {
       setIsLoading(false);
     }
@@ -259,7 +277,7 @@ export default function AuthPages() {
                     )}
                   </div>
 
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="register-confirm-password">
                       Confirm Password
                     </Label>
@@ -279,7 +297,7 @@ export default function AuthPages() {
                         {registerErrors.confirmPassword.message}
                       </p>
                     )}
-                  </div>
+                  </div> */}
 
                   <Button
                     type="submit"
