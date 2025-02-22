@@ -1,44 +1,48 @@
 import { motion } from "framer-motion";
 import { Button } from "../ui/button";
+import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
+import { IProduct } from "@/pages/AllProducts";
+import placeholder from "@/assets/images/card-placeholder.jpeg";
+import { Link } from "react-router-dom";
 
-const products = [
-  {
-    id: 1,
-    name: "Premium Notebook",
-    price: 12.99,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 2,
-    name: "Fountain Pen Set",
-    price: 24.99,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 3,
-    name: "Colored Pencils",
-    price: 9.99,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 4,
-    name: "Desk Organizer",
-    price: 19.99,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 5,
-    name: "Washi Tape Set",
-    price: 7.99,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-  {
-    id: 6,
-    name: "Art Journal",
-    price: 15.99,
-    image: "/placeholder.svg?height=300&width=300",
-  },
-];
+// const products = [
+//   {
+//     id: 1,
+//     name: "Premium Notebook",
+//     price: 12.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//   },
+//   {
+//     id: 2,
+//     name: "Fountain Pen Set",
+//     price: 24.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//   },
+//   {
+//     id: 3,
+//     name: "Colored Pencils",
+//     price: 9.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//   },
+//   {
+//     id: 4,
+//     name: "Desk Organizer",
+//     price: 19.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//   },
+//   {
+//     id: 5,
+//     name: "Washi Tape Set",
+//     price: 7.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//   },
+//   {
+//     id: 6,
+//     name: "Art Journal",
+//     price: 15.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//   },
+// ];
 
 const container = {
   hidden: { opacity: 0 },
@@ -56,6 +60,13 @@ const item = {
 };
 
 export default function FeaturedProducts() {
+  const { data, isLoading } = useGetAllProductsQuery(undefined);
+  const products = data?.data;
+  // const { data: products } = data;
+  if (isLoading) {
+    return;
+  }
+
   return (
     <section className="py-12 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,15 +87,15 @@ export default function FeaturedProducts() {
           viewport={{ once: true }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {products.map((product) => (
+          {products.slice(0, 6).map((product: IProduct) => (
             <motion.div
-              key={product.id}
+              key={product._id}
               variants={item}
               className="bg-white rounded-lg shadow-sm overflow-hidden transition-shadow hover:shadow-lg duration-300"
             >
               <div className="overflow-hidden">
                 <img
-                  src={product.image || "/placeholder.svg"}
+                  src={product.image || placeholder}
                   alt={product.name}
                   className="w-full h-48 object-cover transition-transform hover:scale-105 duration-300"
                 />
@@ -115,7 +126,7 @@ export default function FeaturedProducts() {
             asChild
             className="hover:scale-105 transition-transform"
           >
-            <a href="/products">View All Products</a>
+            <Link to="/products">View All Products</Link>
           </Button>
         </motion.div>
       </div>

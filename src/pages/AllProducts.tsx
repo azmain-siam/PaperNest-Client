@@ -1,30 +1,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
+import ProductCard from "@/components/productsPage/ProductCard";
+import FilterSidebar from "@/components/productsPage/FilterSidebar";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
-interface Product {
+export interface IProduct {
+  _id: string;
   name: string;
   brand: string;
   price: number;
@@ -37,48 +22,19 @@ interface Product {
 
 const categories = [
   "All Categories",
-  "Notebooks",
-  "Writing Tools",
-  "Art Supplies",
+  "Writing",
   "Office Supplies",
-  "Paper Products",
-];
-
-const initialProducts: Product[] = [
-  {
-    id: 1,
-    name: "Premium Leather Journal",
-    price: 29.99,
-    category: "Notebooks",
-    inStock: true,
-    image: "/placeholder.svg?height=200&width=200",
-    description: "High-quality leather journal with premium paper.",
-  },
-  {
-    id: 2,
-    name: "Fountain Pen Set",
-    price: 89.99,
-    category: "Writing Tools",
-    inStock: true,
-    image: "/placeholder.svg?height=200&width=200",
-    description: "Elegant fountain pen set with multiple nibs.",
-  },
-  {
-    id: 3,
-    name: "Artist Sketchbook",
-    price: 19.99,
-    category: "Art Supplies",
-    inStock: false,
-    image: "/placeholder.svg?height=200&width=200",
-    description: "Professional grade sketchbook for artists.",
-  },
-  // Add more products as needed
+  "Art Supplies",
+  "Educational",
+  "Technology",
 ];
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const { data } = useGetAllProductsQuery(undefined);
+  const products = data?.data;
+  // const [products, setProducts] = useState<IProduct[]>(initialProducts);
   const [filteredProducts, setFilteredProducts] =
-    useState<Product[]>(initialProducts);
+    useState<IProduct[]>(products);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [priceRange, setPriceRange] = useState([0, 100]);
@@ -88,6 +44,7 @@ export default function ProductsPage() {
 
   // Filter products based on all criteria
   useEffect(() => {
+    if (!products) return;
     let filtered = [...products];
 
     // Search filter
@@ -116,12 +73,15 @@ export default function ProductsPage() {
     }
 
     // Update active filters
-    const newActiveFilters: string[] = []; 
+    const newActiveFilters: string[] = [];
     if (selectedCategory !== "All Categories")
       newActiveFilters.push(selectedCategory);
+
     if (showInStock) newActiveFilters.push("In Stock Only");
+
     if (priceRange[0] > 0 || priceRange[1] < 100)
       newActiveFilters.push(`$${priceRange[0]} - $${priceRange[1]}`);
+
     setActiveFilters(newActiveFilters);
 
     setFilteredProducts(filtered);
@@ -159,81 +119,18 @@ export default function ProductsPage() {
             <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
           </div>
 
-          <Sheet open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                Filters
-              </Button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader>
-                <SheetTitle>Filters</SheetTitle>
-                <SheetDescription>Refine your product search</SheetDescription>
-              </SheetHeader>
-
-              <div className="py-6 space-y-6">
-                <div className="space-y-2">
-                  <Label>Category</Label>
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={setSelectedCategory}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>
-                    Price Range (${priceRange[0]} - ${priceRange[1]})
-                  </Label>
-                  <Slider
-                    min={0}
-                    max={100}
-                    step={1}
-                    value={priceRange}
-                    onValueChange={setPriceRange}
-                  />
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="inStock"
-                    checked={showInStock}
-                    onCheckedChange={(checked) =>
-                      setShowInStock(checked as boolean)
-                    }
-                  />
-                  <Label htmlFor="inStock">Show only in-stock items</Label>
-                </div>
-              </div>
-
-              <SheetFooter>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSelectedCategory("All Categories");
-                    setPriceRange([0, 100]);
-                    setShowInStock(false);
-                  }}
-                >
-                  Reset Filters
-                </Button>
-                <Button onClick={() => setIsFiltersOpen(false)}>
-                  Apply Filters
-                </Button>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
+          {/* filter sidebar */}
+          <FilterSidebar
+            setIsFiltersOpen={setIsFiltersOpen}
+            isFiltersOpen={isFiltersOpen}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            categories={categories}
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            showInStock={showInStock}
+            setShowInStock={setShowInStock}
+          />
         </div>
       </div>
 
@@ -260,7 +157,7 @@ export default function ProductsPage() {
 
       {/* Products Grid */}
       <AnimatePresence mode="wait">
-        {filteredProducts.length === 0 ? (
+        {filteredProducts?.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -285,47 +182,10 @@ export default function ProductsPage() {
         ) : (
           <motion.div
             layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            {filteredProducts.map((product) => (
-              <motion.div
-                key={product.id}
-                layout
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="group"
-              >
-                <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
-                  <img
-                    src={product.image || "/placeholder.svg"}
-                    alt={product.name}
-                    className="h-full w-full object-cover object-center transition-transform group-hover:scale-105"
-                  />
-                  {!product.inStock && (
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                      <span className="text-white font-medium">
-                        Out of Stock
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="mt-4 space-y-2">
-                  <div className="flex justify-between">
-                    <h3 className="text-sm font-medium">{product.name}</h3>
-                    <p className="text-sm font-medium text-primary">
-                      ${product.price}
-                    </p>
-                  </div>
-                  <p className="text-sm text-gray-500">{product.description}</p>
-                  <div className="flex items-center justify-between">
-                    <Badge variant="secondary">{product.category}</Badge>
-                    <Button variant="link" size="sm" asChild>
-                      <a href={`/products/${product.id}`}>View Details</a>
-                    </Button>
-                  </div>
-                </div>
-              </motion.div>
+            {filteredProducts?.map((product) => (
+              <ProductCard key={product._id} product={product} />
             ))}
           </motion.div>
         )}
