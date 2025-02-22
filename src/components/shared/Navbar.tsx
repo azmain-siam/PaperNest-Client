@@ -40,7 +40,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-white dark:bg-transparent dark:border-b shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -58,7 +58,7 @@ export default function Navbar() {
                 className={({ isActive }) => {
                   // console.log(isActive);
                   return !isActive
-                    ? "text-gray-700 hover:text-primary"
+                    ? "text-gray-700 dark:text-gray-300 hover:text-primary"
                     : "text-primary font-semibold";
                 }}
               >
@@ -77,11 +77,11 @@ export default function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="relative h-8 w-8 rounded-full"
+                    className="relative h-9 w-9 rounded-full border cursor-pointer"
                   >
-                    <Avatar className="h-8 w-8">
+                    <Avatar className="h-9 w-9">
                       <AvatarImage
-                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-VDGiqJNuCLI31tQxow2wGX7CooAMZ8.png"
+                        src="https://i.ibb.co.com/vkcW97y/dummy-man-570x570-1-2.png"
                         alt="User avatar"
                       />
                       <AvatarFallback>UN</AvatarFallback>
@@ -108,7 +108,9 @@ export default function Navbar() {
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
-                    <span>Dashboard</span>
+                    <Link to={"/dashboard"}>
+                      <span>Dashboard</span>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
 

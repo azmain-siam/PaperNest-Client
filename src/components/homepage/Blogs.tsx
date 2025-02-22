@@ -41,7 +41,7 @@ const item = {
 
 export default function BlogSection() {
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gray-50 dark:bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -67,7 +67,7 @@ export default function BlogSection() {
               key={blog.id}
               variants={item}
               // whileHover={}
-              className="bg-white rounded-lg overflow-hidden shadow-sm transition-shadow hover:shadow-md"
+              className="bg-white dark:bg-transparent dark:border rounded-lg overflow-hidden shadow-sm transition-shadow hover:shadow-md"
             >
               <div className="overflow-hidden">
                 <img

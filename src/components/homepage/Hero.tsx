@@ -41,7 +41,7 @@ const item = {
 
 export default function Hero() {
   return (
-    <section className="py-12 bg-white">
+    <section className="py-12 bg-white dark:bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           variants={container}
@@ -55,7 +55,7 @@ export default function Hero() {
               key={index}
               variants={item}
               whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center text-center p-6 bg-gray-50 rounded-lg transition-colors hover:bg-gray-100"
+              className="flex flex-col items-center text-center p-6 bg-gray-50 dark:bg-transparent dark:hover:bg-slate-900 dark:border rounded-lg transition-colors hover:bg-gray-100"
             >
               <motion.div
                 initial={{ rotate: 0 }}

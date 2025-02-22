@@ -68,7 +68,7 @@ export default function FeaturedProducts() {
   }
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gray-50 dark:bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -91,7 +91,7 @@ export default function FeaturedProducts() {
             <motion.div
               key={product._id}
               variants={item}
-              className="bg-white rounded-lg shadow-sm overflow-hidden transition-shadow hover:shadow-lg duration-300"
+              className="bg-white dark:bg-transparent dark:border rounded-lg shadow-sm overflow-hidden transition-shadow hover:shadow-lg duration-300"
             >
               <div className="overflow-hidden">
                 <img

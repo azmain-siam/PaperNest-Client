@@ -13,7 +13,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="group shadow-md hover:shadow-lg rounded-lg"
+      className="group shadow-md hover:shadow-lg rounded-lg dark:border"
     >
       <div className="relative h-[250px] w-full aspect-square overflow-hidden rounded-lg rounded-b-none bg-gray-100">
         <img

@@ -45,7 +45,7 @@ const item = {
 
 export default function Testimonials() {
   return (
-    <section className="py-12 bg-white">
+    <section className="py-12 bg-white dark:bg-transparent">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ export default function Testimonials() {
               key={testimonial.id}
               variants={item}
               whileHover={{ y: -5 }}
-              className="bg-gray-50 p-6 rounded-lg transition-shadow hover:shadow-md"
+              className="bg-gray-50 dark:bg-transparent dark:border p-6 rounded-lg transition-shadow hover:shadow-md"
             >
               <motion.div
                 className="flex mb-4"

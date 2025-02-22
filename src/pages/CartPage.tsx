@@ -1,7 +1,4 @@
-"use client";
-
 import type React from "react";
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2, AlertCircle } from "lucide-react";
@@ -17,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import placeholder from "@/assets/images/card-placeholder.jpeg";
 
 interface CartItem {
   id: number;
@@ -123,7 +121,7 @@ export default function CartPage() {
                   className="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm"
                 >
                   <img
-                    src={item.image || "/placeholder.svg"}
+                    src={placeholder}
                     alt={item.name}
                     className="w-20 h-20 object-cover rounded"
                   />

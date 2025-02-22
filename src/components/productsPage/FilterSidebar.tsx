@@ -44,77 +44,83 @@ const FilterSidebar = ({
   setShowInStock,
 }: IFilterSidebarProps) => {
   return (
-    <Sheet open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
-      <SheetTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
-          <Filter className="h-4 w-4" />
-          Filters
-        </Button>
-      </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Filters</SheetTitle>
-          <SheetDescription>Refine your product search</SheetDescription>
-        </SheetHeader>
-
-        <div className="py-6 space-y-6">
-          <div className="space-y-2">
-            <Label>Category</Label>
-            <Select
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex flex-col space-y-4">
-            <Label>
-              Price Range (${priceRange[0]} - ${priceRange[1]})
-            </Label>
-            <Slider
-              min={0}
-              max={100}
-              step={1}
-              value={priceRange}
-              onValueChange={setPriceRange}
-            />
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="inStock"
-              checked={showInStock}
-              onCheckedChange={(checked) => setShowInStock(checked as boolean)}
-            />
-            <Label htmlFor="inStock">Show only in-stock items</Label>
-          </div>
-        </div>
-
-        <SheetFooter>
-          <Button
-            variant="outline"
-            onClick={() => {
-              setSelectedCategory("All Categories");
-              setPriceRange([0, 100]);
-              setShowInStock(false);
-            }}
-          >
-            Reset Filters
+    <div className="font-primary">
+      <Sheet open={isFiltersOpen} onOpenChange={setIsFiltersOpen}>
+        <SheetTrigger asChild>
+          <Button variant="outline" className="flex items-center gap-2">
+            <Filter className="h-4 w-4" />
+            Filters
           </Button>
-          <Button onClick={() => setIsFiltersOpen(false)}>Apply Filters</Button>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        </SheetTrigger>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Filters</SheetTitle>
+            <SheetDescription>Refine your product search</SheetDescription>
+          </SheetHeader>
+
+          <div className="py-6 space-y-6">
+            <div className="space-y-2">
+              <Label>Category</Label>
+              <Select
+                value={selectedCategory}
+                onValueChange={setSelectedCategory}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-col space-y-4">
+              <Label>
+                Price Range (${priceRange[0]} - ${priceRange[1]})
+              </Label>
+              <Slider
+                min={0}
+                max={100}
+                step={1}
+                value={priceRange}
+                onValueChange={setPriceRange}
+              />
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="inStock"
+                checked={showInStock}
+                onCheckedChange={(checked) =>
+                  setShowInStock(checked as boolean)
+                }
+              />
+              <Label htmlFor="inStock">Show only in-stock items</Label>
+            </div>
+          </div>
+
+          <SheetFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSelectedCategory("All Categories");
+                setPriceRange([0, 100]);
+                setShowInStock(false);
+              }}
+            >
+              Reset Filters
+            </Button>
+            <Button onClick={() => setIsFiltersOpen(false)}>
+              Apply Filters
+            </Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    </div>
   );
 };
 
