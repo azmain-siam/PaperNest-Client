@@ -16,9 +16,10 @@ const cartApi = baseApi.injectEndpoints({
       }),
     }),
     removeFromCart: builder.mutation({
-      query: (productId) => ({
-        url: `/cart/${productId}`,
+      query: (data) => ({
+        url: `/cart`,
         method: "DELETE",
+        body: data,
       }),
     }),
   }),

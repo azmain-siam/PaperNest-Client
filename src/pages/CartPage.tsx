@@ -17,10 +17,12 @@ import placeholder from "@/assets/images/card-placeholder.jpeg";
 import {
   useAddToCartMutation,
   useGetCartQuery,
+  useRemoveFromCartMutation,
 } from "@/redux/features/cart/cartApi";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { IUser } from "@/components/shared/Navbar";
 import { useAppSelector } from "@/redux/hooks";
+import { toast } from "sonner";
 
 interface CartItem {
   productId: {
@@ -41,9 +43,11 @@ export default function CartPage() {
   // const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [formError, setFormError] = useState("");
   const user = useAppSelector(useCurrentUser) as IUser | null;
-  const { data: cartData, isLoading } = useGetCartQuery(user?.id);
-  const [updateCart, { data }] = useAddToCartMutation();
-  console.log(data);
+  const { data: cartData, isLoading, refetch } = useGetCartQuery(user?.id);
+  const [updateCart] = useAddToCartMutation();
+  const [removeFromCart, { data: removeData }] = useRemoveFromCartMutation();
+  console.log(removeData);
+  console.log(cartData, "cartdata");
 
   // const handleIncrease = async (item: CartItem) => {
   //   console.log(item.cartQuantity);
@@ -86,6 +90,17 @@ export default function CartPage() {
         return cartItem;
       });
     });
+  };
+
+  const handleRemoveCartItem = async (itemId: string) => {
+    // console.log(data, "data");
+    const deleteItem = {
+      cartId: cartData.data._id,
+      itemId,
+    };
+    await removeFromCart(deleteItem);
+    refetch();
+    toast.success("Removed item from cart!");
   };
 
   useEffect(() => {
@@ -227,7 +242,7 @@ export default function CartPage() {
                       variant="ghost"
                       size="icon"
                       className="text-red-500 hover:text-red-600"
-                      // onClick={() => removeItem(item._id)}
+                      onClick={() => handleRemoveCartItem(item._id)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
