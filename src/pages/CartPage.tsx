@@ -1,4 +1,3 @@
-import type React from "react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2, AlertCircle } from "lucide-react";
@@ -37,25 +36,6 @@ interface CartItem {
   cartQuantity: number;
   _id: string;
 }
-
-const initialCartItems: CartItem[] = [
-  {
-    id: 1,
-    name: "Premium Notebook",
-    price: 12.99,
-    quantity: 2,
-    stock: 10,
-    image: "/placeholder.svg?height=100&width=100",
-  },
-  {
-    id: 2,
-    name: "Fountain Pen Set",
-    price: 24.99,
-    quantity: 1,
-    stock: 5,
-    image: "/placeholder.svg?height=100&width=100",
-  },
-];
 
 export default function CartPage() {
   // const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
@@ -135,8 +115,8 @@ export default function CartPage() {
   //   );
   // };
 
-  // const removeItem = (id: number) => {
-  //   setCartItems((items) => items.filter((item) => item.id !== id));
+  // const removeItem = (id: string) => {
+  //   setQuantity((items) => items.filter((item) => item._id !== id));
   // };
 
   const subtotal = cartItems?.reduce(
@@ -148,17 +128,17 @@ export default function CartPage() {
   const shipping = subtotal > 50 ? 0 : 5.99;
   const total = subtotal + tax + shipping;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Validate stock levels
-    const invalidItems = cartItems.filter((item) => item.quantity > item.stock);
-    if (invalidItems.length > 0) {
-      setFormError("Some items exceed available stock!");
-      return;
-    }
-    // Process order
-    console.log("Processing order...");
-  };
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   // Validate stock levels
+  //   const invalidItems = cartItems.filter((item) => item.quantity > item.stock);
+  //   if (invalidItems.length > 0) {
+  //     setFormError("Some items exceed available stock!");
+  //     return;
+  //   }
+  //   // Process order
+  //   console.log("Processing order...");
+  // };
 
   if (isLoading || !quantity) {
     return <div>Loading...</div>;
@@ -247,7 +227,7 @@ export default function CartPage() {
                       variant="ghost"
                       size="icon"
                       className="text-red-500 hover:text-red-600"
-                      // onClick={() => removeItem(item.id)}
+                      // onClick={() => removeItem(item._id)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -292,7 +272,10 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form
+                  // onSubmit={handleSubmit}
+                  className="space-y-4"
+                >
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input id="name" required />
@@ -325,7 +308,11 @@ export default function CartPage() {
                     <AlertDescription>{formError}</AlertDescription>
                   </Alert>
                 )}
-                <Button className="w-full" size="lg" onClick={handleSubmit}>
+                <Button
+                  className="w-full"
+                  size="lg"
+                  // onClick={handleSubmit}
+                >
                   Place Order
                 </Button>
               </CardFooter>
