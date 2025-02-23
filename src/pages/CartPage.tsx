@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus, Trash2, AlertCircle } from "lucide-react";
 import {
@@ -15,14 +15,27 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import placeholder from "@/assets/images/card-placeholder.jpeg";
+import {
+  useAddToCartMutation,
+  useGetCartQuery,
+} from "@/redux/features/cart/cartApi";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
+import { IUser } from "@/components/shared/Navbar";
+import { useAppSelector } from "@/redux/hooks";
 
 interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  stock: number;
-  image: string;
+  productId: {
+    _id: string;
+    name: string;
+    brand: string;
+    price: number;
+    category: string;
+    description: string;
+    quantity: number;
+    inStock: boolean;
+  };
+  cartQuantity: number;
+  _id: string;
 }
 
 const initialCartItems: CartItem[] = [
@@ -45,28 +58,90 @@ const initialCartItems: CartItem[] = [
 ];
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
+  // const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [formError, setFormError] = useState("");
+  const user = useAppSelector(useCurrentUser) as IUser | null;
+  const { data: cartData, isLoading } = useGetCartQuery(user?.id);
+  const [updateCart, { data }] = useAddToCartMutation();
+  console.log(data);
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    setCartItems((items) =>
-      items.map((item) => {
-        if (item.id === id) {
-          // Ensure quantity doesn't exceed stock or go below 1
-          const validQuantity = Math.min(Math.max(1, newQuantity), item.stock);
-          return { ...item, quantity: validQuantity };
+  // const handleIncrease = async (item: CartItem) => {
+  //   console.log(item.cartQuantity);
+  //   await updateCart({
+  //     userId: user?.id,
+  //     productId: item.productId._id,
+  //     quantity: 1,
+  //   });
+
+  //   refetch();
+  // };
+  // console.log(updateCart);
+  const cartItems: CartItem[] = cartData?.data?.items;
+  const [quantity, setQuantity] = useState<CartItem[]>([]);
+
+  useEffect(() => {
+    setQuantity(cartItems);
+  }, [cartItems]);
+
+  console.log(cartItems);
+  console.log(quantity, "quantity");
+
+  const handleIncrease = (item: CartItem) => {
+    setQuantity((prev) => {
+      return prev.map((cartItem) => {
+        if (cartItem.productId._id === item.productId._id) {
+          return { ...cartItem, cartQuantity: cartItem.cartQuantity + 1 };
         }
-        return item;
-      })
-    );
+        return cartItem;
+      });
+    });
   };
 
-  const removeItem = (id: number) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
+  const handleDecrease = (item: CartItem) => {
+    setQuantity((prev) => {
+      return prev.map((cartItem) => {
+        if (cartItem.productId._id === item.productId._id) {
+          return { ...cartItem, cartQuantity: cartItem.cartQuantity - 1 };
+        }
+        return cartItem;
+      });
+    });
   };
 
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      cartItems.forEach((item, idx) => {
+        updateCart({
+          userId: user?.id,
+          productId: item.productId._id,
+          quantity: quantity[idx].cartQuantity,
+        });
+      });
+    }, 1000); // Debounce API call
+
+    return () => clearTimeout(timer);
+  }, [cartItems, updateCart, quantity, user]);
+
+  // const updateQuantity = (id: number, newQuantity: number) => {
+  //   setCartItems((items) =>
+  //     items.map((item) => {
+  //       if (item.id === id) {
+  //         // Ensure quantity doesn't exceed stock or go below 1
+  //         const validQuantity = Math.min(Math.max(1, newQuantity), item.stock);
+  //         return { ...item, quantity: validQuantity };
+  //       }
+  //       return item;
+  //     })
+  //   );
+  // };
+
+  // const removeItem = (id: number) => {
+  //   setCartItems((items) => items.filter((item) => item.id !== id));
+  // };
+
+  const subtotal = cartItems?.reduce(
+    (sum, item, idx) =>
+      sum + item.productId.price * quantity?.[idx]?.cartQuantity,
     0
   );
   const tax = subtotal * 0.1; // 10% tax
@@ -85,6 +160,10 @@ export default function CartPage() {
     console.log("Processing order...");
   };
 
+  if (isLoading || !quantity) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <motion.h1
@@ -102,7 +181,7 @@ export default function CartPage() {
           animate={{ opacity: 1, x: 0 }}
           className="lg:col-span-2"
         >
-          {cartItems.length === 0 ? (
+          {cartItems?.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500">Your cart is empty</p>
               <Button className="mt-4" asChild>
@@ -111,9 +190,9 @@ export default function CartPage() {
             </div>
           ) : (
             <div className="space-y-4">
-              {cartItems.map((item) => (
+              {cartItems?.map((item: CartItem, idx) => (
                 <motion.div
-                  key={item.id}
+                  key={item._id}
                   layout
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -122,31 +201,36 @@ export default function CartPage() {
                 >
                   <img
                     src={placeholder}
-                    alt={item.name}
+                    alt={item.productId.name}
                     className="w-20 h-20 object-cover rounded"
                   />
                   <div className="flex-1">
-                    <h3 className="font-medium">{item.name}</h3>
-                    <p className="text-sm text-gray-500">Stock: {item.stock}</p>
+                    <h3 className="font-medium">{item.productId.name}</h3>
+                    <p className="text-sm text-gray-500">
+                      Stock: {item.productId.quantity}
+                    </p>
                     <div className="flex items-center gap-2 mt-2">
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
-                        disabled={item.quantity <= 1}
+                        // onClick={() =>
+                        //   updateQuantity(item.id, item.quantity - 1)
+                        // }
+                        onClick={() => handleDecrease(item)}
+                        disabled={quantity[idx]?.cartQuantity <= 1}
                       >
                         <Minus className="h-4 w-4" />
                       </Button>
-                      <span className="w-12 text-center">{item.quantity}</span>
+                      <span className="w-12 text-center">
+                        {quantity[idx]?.cartQuantity}
+                      </span>
                       <Button
                         variant="outline"
                         size="icon"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
+                        onClick={() => handleIncrease(item)}
+                        disabled={
+                          quantity[idx]?.cartQuantity >= item.productId.quantity
                         }
-                        disabled={item.quantity >= item.stock}
                       >
                         <Plus className="h-4 w-4" />
                       </Button>
@@ -154,13 +238,16 @@ export default function CartPage() {
                   </div>
                   <div className="text-right">
                     <p className="font-medium">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      $
+                      {(
+                        item.productId.price * quantity[idx].cartQuantity
+                      ).toFixed(2)}
                     </p>
                     <Button
                       variant="ghost"
                       size="icon"
                       className="text-red-500 hover:text-red-600"
-                      onClick={() => removeItem(item.id)}
+                      // onClick={() => removeItem(item.id)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

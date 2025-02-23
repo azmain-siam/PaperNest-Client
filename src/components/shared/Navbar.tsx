@@ -22,7 +22,8 @@ interface ILink {
   href: string;
 }
 
-interface IUser {
+export interface IUser {
+  id: string;
   name: string;
   email: string;
   role: string;
@@ -38,7 +39,7 @@ export default function Navbar() {
   // console.log(user);
   const handleLogout = () => {
     dispatch(logout());
-    toast.success("Logged out successfully", {duration: 3000});
+    toast.success("Logged out successfully", { duration: 3000 });
   };
 
   return (
