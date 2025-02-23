@@ -1,5 +1,5 @@
 import placeholder from "@/assets/images/card-placeholder.jpeg";
-import { use, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus, Star, Truck, RefreshCw, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,62 +19,6 @@ import { IUser } from "@/components/shared/Navbar";
 import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
 import { toast } from "sonner";
 
-// interface ProductImage {
-//   id: number;
-//   url: string;
-//   alt: string;
-// }
-
-// const productImages: ProductImage[] = [
-//   {
-//     id: 1,
-//     url: "/placeholder.svg?height=600&width=600",
-//     alt: "Product image 1",
-//   },
-//   {
-//     id: 2,
-//     url: "/placeholder.svg?height=600&width=600",
-//     alt: "Product image 2",
-//   },
-//   {
-//     id: 3,
-//     url: "/placeholder.svg?height=600&width=600",
-//     alt: "Product image 3",
-//   },
-//   {
-//     id: 4,
-//     url: "/placeholder.svg?height=600&width=600",
-//     alt: "Product image 4",
-//   },
-// ];
-
-// const relatedProducts = [
-//   {
-//     id: 1,
-//     name: "Premium Notebook",
-//     price: 12.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-//   {
-//     id: 2,
-//     name: "Fountain Pen Set",
-//     price: 24.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-//   {
-//     id: 3,
-//     name: "Colored Pencils",
-//     price: 9.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-//   {
-//     id: 4,
-//     name: "Desk Organizer",
-//     price: 19.99,
-//     image: "/placeholder.svg?height=200&width=200",
-//   },
-// ];
-
 const ProductDetails = () => {
   const { productId } = useParams();
   const user = useAppSelector(useCurrentUser) as IUser | null;
@@ -82,14 +26,8 @@ const ProductDetails = () => {
   const { data: response, isLoading: isProductsLoading } =
     useGetAllProductsQuery(undefined);
   const [addToCart] = useAddToCartMutation();
-  // console.log(response);
   const products: IProduct[] = response?.data;
-  // console.log(products, "products");
   const product: IProduct = data?.data;
-  // const { data: product }:{ data: IProduct } = data;
-  // console.log(product);
-  // const { data: product }: { data: IProduct } = data;
-  // const [selectedImage, setSelectedImage] = useState(productImages[0]);
   const [quantity, setQuantity] = useState(1);
 
   const decreaseQuantity = () => {
@@ -142,26 +80,6 @@ const ProductDetails = () => {
               className="h-full w-full object-cover object-center"
             />
           </div>
-          {/* <div className="grid grid-cols-4 gap-4">
-            {productImages.map((image) => (
-              <motion.button
-                key={image.id}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedImage(image)}
-                className={cn(
-                  "aspect-square overflow-hidden rounded-lg border bg-gray-100",
-                  selectedImage.id === image.id && "ring-2 ring-primary"
-                )}
-              >
-                <img
-                  src={image.url || "/placeholder.svg"}
-                  alt={image.alt}
-                  className="h-full w-full object-cover object-center"
-                />
-              </motion.button>
-            ))}
-          </div> */}
         </motion.div>
 
         {/* Product Info */}
@@ -214,11 +132,17 @@ const ProductDetails = () => {
                 size="icon"
                 onClick={decreaseQuantity}
                 disabled={quantity <= 1}
+                className="cursor-pointer"
               >
                 <Minus className="h-4 w-4" />
               </Button>
               <span className="w-12 text-center">{quantity}</span>
-              <Button variant="outline" size="icon" onClick={increaseQuantity}>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={increaseQuantity}
+                className="cursor-pointer"
+              >
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -228,7 +152,7 @@ const ProductDetails = () => {
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <Button
               onClick={() => handleAddToCart(product._id)}
-              className="w-full h-12 text-lg"
+              className="w-full h-12 text-lg cursor-pointer"
             >
               Add to Cart
             </Button>
