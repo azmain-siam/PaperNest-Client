@@ -46,7 +46,7 @@ const team = [
     name: "Sarah Johnson",
     role: "Founder & CEO",
     image: "/placeholder.svg?height=400&width=400",
-    bio: "With 15 years in the stationery industry, Sarah founded StationaryShop with a vision to bring quality writing materials to creative minds worldwide.",
+    bio: "With 15 years in the stationery industry, Sarah founded PaperNest with a vision to bring quality writing materials to creative minds worldwide.",
   },
   {
     name: "Michael Chen",
@@ -58,7 +58,7 @@ const team = [
     name: "Emma Davis",
     role: "Customer Experience",
     image: "/placeholder.svg?height=400&width=400",
-    bio: "Emma ensures that every customer interaction with StationaryShop is memorable and satisfying.",
+    bio: "Emma ensures that every customer interaction with PaperNest is memorable and satisfying.",
   },
 ];
 
@@ -104,7 +104,7 @@ export default function AboutPage() {
             <div className="space-y-6">
               <h2 className="text-3xl font-bold">Our Story</h2>
               <p className="text-gray-600">
-                Founded in 2009, StationaryShop began with a simple mission: to
+                Founded in 2009, PaperNest began with a simple mission: to
                 provide high-quality stationery that inspires creativity and
                 productivity. What started as a small local store has grown into
                 a global community of stationery enthusiasts.
@@ -217,8 +217,7 @@ export default function AboutPage() {
           >
             <h2 className="text-3xl font-bold mb-4">Meet Our Team</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              The passionate people behind StationaryShop who make it all
-              possible.
+              The passionate people behind PaperNest who make it all possible.
             </p>
           </motion.div>
 

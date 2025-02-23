@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Button } from "../ui/button";
 import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
 import { IProduct } from "@/pages/AllProducts";
-import placeholder from "@/assets/images/card-placeholder.jpeg";
 import { Link } from "react-router-dom";
+import ProductCard from "../productsPage/ProductCard";
 
 // const products = [
 //   {
@@ -91,25 +91,8 @@ export default function FeaturedProducts() {
             <motion.div
               key={product._id}
               variants={item}
-              className="bg-white dark:bg-transparent dark:border rounded-lg shadow-sm overflow-hidden transition-shadow hover:shadow-lg duration-300"
             >
-              <div className="overflow-hidden">
-                <img
-                  src={product.image || placeholder}
-                  alt={product.name}
-                  className="w-full h-48 object-cover transition-transform hover:scale-105 duration-300"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
-                <p className="text-primary font-bold">${product.price}</p>
-                <Button
-                  className="w-full mt-4 transition-transform active:scale-95 duration-300 cursor-pointer"
-                  // whileHover={{ scale: 1.02 }}
-                >
-                  Add to Cart
-                </Button>
-              </div>
+              <ProductCard product={product} />
             </motion.div>
           ))}
         </motion.div>

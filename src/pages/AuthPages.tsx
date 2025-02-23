@@ -89,6 +89,8 @@ export default function AuthPages() {
       }
       if (res.data) {
         console.log("user registerd");
+        toast.success("Registration Successful!", { duration: 3000 });
+        setIsLogin(true);
       }
     } catch (error) {
       console.error("Registration error:", error);

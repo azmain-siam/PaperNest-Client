@@ -15,6 +15,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/ui/themeProvider";
+import { toast } from "sonner";
 
 interface ILink {
   name: string;
@@ -37,6 +38,7 @@ export default function Navbar() {
   // console.log(user);
   const handleLogout = () => {
     dispatch(logout());
+    toast.success("Logged out successfully", {duration: 3000});
   };
 
   return (
