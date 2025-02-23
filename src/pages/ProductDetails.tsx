@@ -1,5 +1,5 @@
 import placeholder from "@/assets/images/card-placeholder.jpeg";
-import { useState } from "react";
+import { use, useState } from "react";
 import { motion } from "framer-motion";
 import { Minus, Plus, Star, Truck, RefreshCw, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,11 @@ import {
 import { IProduct } from "./AllProducts";
 // import { u } from "node_modules/framer-motion/dist/types.d-6pKw1mTI";
 import ProductCard from "@/components/productsPage/ProductCard";
+import { useAppSelector } from "@/redux/hooks";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
+import { IUser } from "@/components/shared/Navbar";
+import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
+import { toast } from "sonner";
 
 // interface ProductImage {
 //   id: number;
@@ -72,12 +77,14 @@ import ProductCard from "@/components/productsPage/ProductCard";
 
 const ProductDetails = () => {
   const { productId } = useParams();
+  const user = useAppSelector(useCurrentUser) as IUser | null;
   const { data, isLoading } = useGetProductByIdQuery(productId);
   const { data: response, isLoading: isProductsLoading } =
     useGetAllProductsQuery(undefined);
-  console.log(response);
+  const [addToCart] = useAddToCartMutation();
+  // console.log(response);
   const products: IProduct[] = response?.data;
-  console.log(products, "products");
+  // console.log(products, "products");
   const product: IProduct = data?.data;
   // const { data: product }:{ data: IProduct } = data;
   // console.log(product);
@@ -91,6 +98,21 @@ const ProductDetails = () => {
 
   const increaseQuantity = () => {
     setQuantity((prev) => prev + 1);
+  };
+
+  const handleAddToCart = async (productId: string) => {
+    // console.log(data);
+    const cartData = {
+      productId,
+      quantity,
+      userId: user?.id,
+    };
+
+    const { data } = await addToCart(cartData);
+    console.log(data, "res");
+    if (data.statusCode === 201) {
+      toast.success("Product added to cart successfully", { duration: 3000 });
+    }
   };
 
   if (isLoading || isProductsLoading) {
@@ -204,7 +226,12 @@ const ProductDetails = () => {
 
           {/* Add to Cart Button */}
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Button className="w-full h-12 text-lg">Add to Cart</Button>
+            <Button
+              onClick={() => handleAddToCart(product._id)}
+              className="w-full h-12 text-lg"
+            >
+              Add to Cart
+            </Button>
           </motion.div>
 
           {/* Features */}
@@ -318,7 +345,7 @@ const ProductDetails = () => {
       <div className="mt-16">
         <h2 className="text-2xl font-bold mb-8">Related Products</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {products.slice(0,4).map((product: IProduct) => (
+          {products.slice(0, 4).map((product: IProduct) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>

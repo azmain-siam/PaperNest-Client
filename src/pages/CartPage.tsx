@@ -67,9 +67,6 @@ export default function CartPage() {
     setQuantity(cartItems);
   }, [cartItems]);
 
-  console.log(cartItems);
-  console.log(quantity, "quantity");
-
   const handleIncrease = (item: CartItem) => {
     setQuantity((prev) => {
       return prev.map((cartItem) => {
@@ -235,7 +232,7 @@ export default function CartPage() {
                     <p className="font-medium">
                       $
                       {(
-                        item.productId.price * quantity[idx].cartQuantity
+                        item.productId.price * quantity?.[idx]?.cartQuantity
                       ).toFixed(2)}
                     </p>
                     <Button
