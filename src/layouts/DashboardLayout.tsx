@@ -14,7 +14,7 @@ export default function Dashboard() {
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 p-8 ml-0 md:ml-64 lg:ml-72">
+        <main className="flex-1 py-6 pr-8 ml-0 md:ml-64 lg:ml-72">
           <Outlet />
         </main>
       </div>
