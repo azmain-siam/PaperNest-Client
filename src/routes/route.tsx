@@ -1,10 +1,13 @@
 import App from "@/App";
+import DashboardLayout from "@/layouts/DashboardLayout";
 import ProtectedRoute from "@/layouts/ProtectedRoute";
 import AboutPage from "@/pages/About";
 import ProductsPage from "@/pages/AllProducts";
 import AuthPages from "@/pages/AuthPages";
 import CartPage from "@/pages/CartPage";
-import Dashboard from "@/pages/Dashboard";
+import OrdersManagement from "@/pages/dashboard/admin/OrderManagement";
+import ProductsManagement from "@/pages/dashboard/admin/ProductManagement";
+import UserManagement from "@/pages/dashboard/admin/UserManagement";
 import Home from "@/pages/Home";
 import ProductDetails from "@/pages/ProductDetails";
 import { createBrowserRouter } from "react-router-dom";
@@ -46,7 +49,21 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "manage-orders",
+        element: <OrdersManagement />,
+      },
+      {
+        path: "product-management",
+        element: <ProductsManagement />,
+      },
+      {
+        path: "users-management",
+        element: <UserManagement />,
+      },
+    ],
   },
 ]);
 

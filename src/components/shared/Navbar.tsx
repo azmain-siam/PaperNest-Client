@@ -109,12 +109,12 @@ export default function Navbar() {
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <Link to={"/dashboard"}>
+                  <Link to={"/dashboard"}>
+                    <DropdownMenuItem>
+                      <Settings className="mr-2 h-4 w-4" />
                       <span>Dashboard</span>
-                    </Link>
-                  </DropdownMenuItem>
+                    </DropdownMenuItem>
+                  </Link>
                   <DropdownMenuSeparator />
 
                   <div className="px-2">
