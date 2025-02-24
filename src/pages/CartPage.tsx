@@ -114,23 +114,6 @@ export default function CartPage() {
     return () => clearTimeout(timer);
   }, [cartItems, updateCart, quantity, user]);
 
-  // const updateQuantity = (id: number, newQuantity: number) => {
-  //   setCartItems((items) =>
-  //     items.map((item) => {
-  //       if (item.id === id) {
-  //         // Ensure quantity doesn't exceed stock or go below 1
-  //         const validQuantity = Math.min(Math.max(1, newQuantity), item.stock);
-  //         return { ...item, quantity: validQuantity };
-  //       }
-  //       return item;
-  //     })
-  //   );
-  // };
-
-  // const removeItem = (id: string) => {
-  //   setQuantity((items) => items.filter((item) => item._id !== id));
-  // };
-
   const subtotal = cartItems?.reduce(
     (sum, item, idx) =>
       sum + item.productId.price * quantity?.[idx]?.cartQuantity,

@@ -9,10 +9,12 @@ export default function Dashboard() {
       <DashboardHeader />
 
       <div className="flex">
-        <DashboardSidebar />
+        <div className="hidden md:block md:relative h-full">
+          <DashboardSidebar />
+        </div>
 
         {/* Main Content */}
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-8 ml-0 md:ml-64 lg:ml-72">
           <Outlet />
         </main>
       </div>

@@ -1,6 +1,6 @@
 const DashboardHeader = () => {
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-sm sticky top-0 z-10">
       <div className="h-16 flex items-center justify-between px-4">
         <h1 className="text-xl font-bold text-primary">PaperNest Dashboard</h1>
 

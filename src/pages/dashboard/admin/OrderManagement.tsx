@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { Badge } from "../../../components/ui/badge";
+import { useGetAllOrdersQuery } from "@/redux/features/orders/ordersApi";
 
 interface Order {
   id: string;
@@ -57,6 +58,10 @@ const orders: Order[] = [
 
 export default function OrdersManagement() {
   const [sortedOrders, setSortedOrders] = useState(orders);
+  const { data } = useGetAllOrdersQuery([]);
+  const orderss = data?.data;
+
+  console.log(orderss);
 
   const updateOrderStatus = (orderId: string, newStatus: Order["status"]) => {
     setSortedOrders(
