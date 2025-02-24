@@ -18,61 +18,73 @@ import {
   DropdownMenuTrigger,
 } from "../../../components/ui/dropdown-menu";
 import { Badge } from "../../../components/ui/badge";
-import { useGetAllOrdersQuery } from "@/redux/features/orders/ordersApi";
+import {
+  useGetAllOrdersQuery,
+  useUpdateOrderStatusMutation,
+} from "@/redux/features/orders/ordersApi";
+import { IUser } from "@/components/shared/Navbar";
+import { toast } from "sonner";
 
-interface Order {
-  id: string;
-  customer: string;
-  date: string;
-  total: number;
-  status: "pending" | "shipping" | "delivered" | "cancelled";
-  items: number;
+interface IOrder {
+  _id: string;
+  user: IUser;
+  products: {
+    productId: string;
+    quantity: number;
+    totalPrice: number;
+  }[];
+  status: "pending" | "shipping" | "cancelled" | "delivered";
+  createdAt: string;
 }
 
-const orders: Order[] = [
-  {
-    id: "ORD001",
-    customer: "John Doe",
-    date: "2024-02-20",
-    total: 129.99,
-    status: "pending",
-    items: 3,
-  },
-  {
-    id: "ORD002",
-    customer: "Jane Smith",
-    date: "2024-02-19",
-    total: 79.99,
-    status: "shipping",
-    items: 2,
-  },
-  {
-    id: "ORD003",
-    customer: "Mike Johnson",
-    date: "2024-02-18",
-    total: 199.99,
-    status: "delivered",
-    items: 4,
-  },
-];
+// const orders: Order[] = [
+//   {
+//     id: "ORD001",
+//     customer: "John Doe",
+//     date: "2024-02-20",
+//     total: 129.99,
+//     status: "pending",
+//     items: 3,
+//   },
+//   {
+//     id: "ORD002",
+//     customer: "Jane Smith",
+//     date: "2024-02-19",
+//     total: 79.99,
+//     status: "shipping",
+//     items: 2,
+//   },
+//   {
+//     id: "ORD003",
+//     customer: "Mike Johnson",
+//     date: "2024-02-18",
+//     total: 199.99,
+//     status: "delivered",
+//     items: 4,
+//   },
+// ];
 
 export default function OrdersManagement() {
-  const [sortedOrders, setSortedOrders] = useState(orders);
-  const { data } = useGetAllOrdersQuery([]);
-  const orderss = data?.data;
+  const { data, isLoading, refetch } = useGetAllOrdersQuery([]);
+  const orders = data?.data as IOrder[];
+  const [updateOrderStatus] = useUpdateOrderStatusMutation();
 
-  console.log(orderss);
+  const handleChangeStatus = async (
+    orderId: string,
+    newStatus: IOrder["status"]
+  ) => {
+    const res = await updateOrderStatus({ orderId, status: newStatus });
+    console.log(res.data.success, "clg res");
 
-  const updateOrderStatus = (orderId: string, newStatus: Order["status"]) => {
-    setSortedOrders(
-      orders.map((order) => {
-        if (order.id === orderId) {
-          return { ...order, status: newStatus };
-        }
-        return order;
-      })
-    );
+    if (res.data.success) {
+      toast.success("Order status updated successfully");
+      refetch();
+    }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="space-y-4">
@@ -83,7 +95,7 @@ export default function OrdersManagement() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Order ID</TableHead>
+            <TableHead>#</TableHead>
             <TableHead>Customer</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Items</TableHead>
@@ -93,13 +105,18 @@ export default function OrdersManagement() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedOrders.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell className="font-medium">{order.id}</TableCell>
-              <TableCell>{order.customer}</TableCell>
-              <TableCell>{order.date}</TableCell>
-              <TableCell>{order.items} items</TableCell>
-              <TableCell>${order.total.toFixed(2)}</TableCell>
+          {orders.map((order, idx) => (
+            <TableRow key={order._id}>
+              <TableCell className="font-medium">{idx + 1}</TableCell>
+              <TableCell>{order.user.name}</TableCell>
+              <TableCell>
+                {new Date(order.createdAt).toLocaleDateString()}
+              </TableCell>
+              <TableCell>
+                {order.products.length}{" "}
+                {order.products.length > 1 ? "items" : "item"}
+              </TableCell>
+              <TableCell>${/* {order.total.toFixed(2)} */}</TableCell>
               <TableCell>
                 <Badge
                   variant={
@@ -126,7 +143,9 @@ export default function OrdersManagement() {
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     {order.status === "pending" && (
                       <DropdownMenuItem
-                        onClick={() => updateOrderStatus(order.id, "shipping")}
+                        onClick={() =>
+                          handleChangeStatus(order._id, "shipping")
+                        }
                       >
                         <Truck className="mr-2 h-4 w-4" />
                         Mark as Shipping
@@ -134,7 +153,9 @@ export default function OrdersManagement() {
                     )}
                     {order.status === "shipping" && (
                       <DropdownMenuItem
-                        onClick={() => updateOrderStatus(order.id, "delivered")}
+                        onClick={() =>
+                          handleChangeStatus(order._id, "delivered")
+                        }
                       >
                         <CheckCircle className="mr-2 h-4 w-4" />
                         Mark as Delivered
@@ -146,7 +167,7 @@ export default function OrdersManagement() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                           onClick={() =>
-                            updateOrderStatus(order.id, "cancelled")
+                            handleChangeStatus(order._id, "cancelled")
                           }
                           className="text-red-600"
                         >
