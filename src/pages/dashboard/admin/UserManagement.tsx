@@ -25,20 +25,21 @@ import { toast } from "sonner";
 
 export default function UserManagement() {
   const { data, isLoading, refetch } = useGetUserQuery(undefined);
-  const [updateUser, { data: response, error }] = useUpdateUserMutation();
+  const [updateUser, { error }] = useUpdateUserMutation();
   const users = data?.data as IUser[];
-
-  console.log(response, error);
 
   const toggleUserStatus = async (user: IUser) => {
     try {
       const status = user.status === "active" ? "inactive" : "active";
+
       const res = await updateUser({ userId: user._id, status });
 
-      console.log(res.data.statusCode);
       if (res.data.statusCode === 200) {
         toast.success("Updated user status");
         refetch();
+      } else {
+        toast.error("Something went wrong");
+        console.log(error);
       }
     } catch (error) {
       console.error(error);
