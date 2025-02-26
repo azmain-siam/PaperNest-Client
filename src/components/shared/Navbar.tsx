@@ -23,10 +23,12 @@ interface ILink {
 }
 
 export interface IUser {
+  _id: string;
   id: string;
   name: string;
   email: string;
   role: string;
+  status?: string;
   iat: number;
   exp: number;
 }
