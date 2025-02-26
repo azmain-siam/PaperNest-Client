@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CheckCircle, MoreHorizontal, XCircle } from "lucide-react";
+import { MoreHorizontal, XCircle } from "lucide-react";
 import { IOrder } from "../admin/OrderManagement";
 import {
   useGetOrdersByUserQuery,
