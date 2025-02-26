@@ -111,7 +111,7 @@ export default function ProductsManagement() {
                     placeholder="Enter product name"
                   />
                   {errors.name && (
-                    <p className="text-red-500">
+                    <p className="text-red-500 text-[13px]">
                       {errors.name.message as string}
                     </p>
                   )}
@@ -126,7 +126,7 @@ export default function ProductsManagement() {
                     placeholder="Enter brand name"
                   />
                   {errors.brand && (
-                    <p className="text-red-500">
+                    <p className="text-red-500 text-[13px]">
                       {errors.brand.message as string}
                     </p>
                   )}
@@ -141,7 +141,7 @@ export default function ProductsManagement() {
                     placeholder="$0.00"
                   />
                   {errors.price && (
-                    <p className="text-red-500">
+                    <p className="text-red-500 text-[13px]">
                       {errors.price.message as string}
                     </p>
                   )}
@@ -155,7 +155,7 @@ export default function ProductsManagement() {
                     placeholder="0"
                   />
                   {errors.quantity && (
-                    <p className="text-red-500">
+                    <p className="text-red-500 text-[13px]">
                       {errors.quantity.message as string}
                     </p>
                   )}
@@ -186,13 +186,10 @@ export default function ProductsManagement() {
                           {category}
                         </SelectItem>
                       ))}
-                      {/* <SelectItem value="light">Light</SelectItem>
-                      <SelectItem value="dark">Dark</SelectItem>
-                      <SelectItem value="system">System</SelectItem> */}
                     </SelectContent>
                   </Select>
                   {errors.category && (
-                    <p className="text-red-500">
+                    <p className="text-red-500 text-[13px]">
                       {errors.category?.message as string}
                     </p>
                   )}
@@ -207,7 +204,7 @@ export default function ProductsManagement() {
                     placeholder="Enter image URL"
                   />
                   {errors.image && (
-                    <p className="text-red-500">
+                    <p className="text-red-500 text-[13px]">
                       {errors.image.message as string}
                     </p>
                   )}
@@ -223,7 +220,7 @@ export default function ProductsManagement() {
                     placeholder="Enter description..."
                   />
                   {errors.description && (
-                    <p className="text-red-500">
+                    <p className="text-red-500 text-[13px]">
                       {errors.description.message as string}
                     </p>
                   )}

@@ -17,7 +17,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { IProduct } from "@/pages/dashboard/admin/ProductManagement";
+import { useDeleteProductMutation } from "@/redux/features/products/productsApi";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface IProductTableProps {
   products: IProduct[];
@@ -30,6 +32,19 @@ const ProductsTable = ({
   setIsAddDialogOpen,
   setSelectedProduct,
 }: IProductTableProps) => {
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const handleDeleteProduct = async (productId: string) => {
+    try {
+      const res = await deleteProduct(productId).unwrap();
+      console.log(res);
+      toast.success("Product deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete product");
+      console.log(error);
+    }
+  };
+
   return (
     <div className="border rounded-lg">
       <Table>
@@ -75,7 +90,10 @@ const ProductsTable = ({
                         Edit
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="text-red-600">
+                      <DropdownMenuItem
+                        onClick={() => handleDeleteProduct(product._id)}
+                        className="text-red-600"
+                      >
                         <Trash2 className="mr-2 h-4 w-4" />
                         Delete
                       </DropdownMenuItem>
