@@ -47,25 +47,20 @@ export interface IProduct {
 
 export default function ProductsManagement() {
   const [addProduct, { error }] = useAddProductMutation();
-  // console.log(response, error);
   const { data, isLoading, refetch } = useGetAllProductsQuery(undefined);
   const products: IProduct[] = data?.data;
   const {
     register,
     handleSubmit,
     setValue,
-    // watch,
     formState: { errors },
-  } = useForm();
-
-  // const selectedCategory = watch("category");
+  } = useForm<IProduct>();
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
 
   const onSubmitHandler = async (data: IProduct) => {
     const res = await addProduct(data);
-    console.log(res.data.status, "responseseeee");
 
     if (res.data.status) {
       toast.success("Product added successfully");
@@ -77,14 +72,6 @@ export default function ProductsManagement() {
 
     setIsAddDialogOpen(false);
   };
-
-  // const getStockStatus = (
-  //   stock: number
-  // ): "in-stock" | "low-stock" | "out-of-stock" => {
-  //   if (stock === 0) return "out-of-stock";
-  //   if (stock < 10) return "low-stock";
-  //   return "in-stock";
-  // };
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -124,7 +111,9 @@ export default function ProductsManagement() {
                     placeholder="Enter product name"
                   />
                   {errors.name && (
-                    <p className="text-red-500">{errors.name.message}</p>
+                    <p className="text-red-500">
+                      {errors.name.message as string}
+                    </p>
                   )}
                 </div>
 
@@ -137,7 +126,9 @@ export default function ProductsManagement() {
                     placeholder="Enter brand name"
                   />
                   {errors.brand && (
-                    <p className="text-red-500">{errors.brand.message}</p>
+                    <p className="text-red-500">
+                      {errors.brand.message as string}
+                    </p>
                   )}
                 </div>
 
@@ -150,7 +141,9 @@ export default function ProductsManagement() {
                     placeholder="$0.00"
                   />
                   {errors.price && (
-                    <p className="text-red-500">{errors.price.message}</p>
+                    <p className="text-red-500">
+                      {errors.price.message as string}
+                    </p>
                   )}
                 </div>
                 <div className="grid gap-2">
@@ -161,15 +154,19 @@ export default function ProductsManagement() {
                     {...register("quantity", { required: "Stock is required" })}
                     placeholder="0"
                   />
-                  {errors.stock && (
-                    <p className="text-red-500">{errors.stock.message}</p>
+                  {errors.quantity && (
+                    <p className="text-red-500">
+                      {errors.quantity.message as string}
+                    </p>
                   )}
                 </div>
 
                 <div className="grid gap-2">
                   <Label htmlFor="category">Category</Label>
                   <Select
-                    onValueChange={(value) => setValue("category", value)}
+                    onValueChange={(value) =>
+                      setValue("category", value as IProduct["category"])
+                    }
                     {...register("category", {
                       required: "Category is required",
                     })}
@@ -195,7 +192,9 @@ export default function ProductsManagement() {
                     </SelectContent>
                   </Select>
                   {errors.category && (
-                    <p className="text-red-500">{errors.category.message}</p>
+                    <p className="text-red-500">
+                      {errors.category?.message as string}
+                    </p>
                   )}
                 </div>
 
@@ -207,8 +206,10 @@ export default function ProductsManagement() {
                     {...register("image")}
                     placeholder="Enter image URL"
                   />
-                  {errors.brand && (
-                    <p className="text-red-500">{errors.image.message}</p>
+                  {errors.image && (
+                    <p className="text-red-500">
+                      {errors.image.message as string}
+                    </p>
                   )}
                 </div>
 
@@ -221,8 +222,10 @@ export default function ProductsManagement() {
                     })}
                     placeholder="Enter description..."
                   />
-                  {errors.brand && (
-                    <p className="text-red-500">{errors.description.message}</p>
+                  {errors.description && (
+                    <p className="text-red-500">
+                      {errors.description.message as string}
+                    </p>
                   )}
                 </div>
               </div>
