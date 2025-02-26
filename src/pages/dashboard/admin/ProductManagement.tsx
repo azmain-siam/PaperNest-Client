@@ -38,14 +38,6 @@ export default function ProductsManagement() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
 
-  // const getStockStatus = (
-  //   stock: number
-  // ): "in-stock" | "low-stock" | "out-of-stock" => {
-  //   if (stock === 0) return "out-of-stock";
-  //   if (stock < 10) return "low-stock";
-  //   return "in-stock";
-  // };
-
   if (isLoading) return <div>Loading...</div>;
 
   return (
