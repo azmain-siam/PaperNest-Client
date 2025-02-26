@@ -16,6 +16,8 @@ import {
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/components/ui/themeProvider";
 import { toast } from "sonner";
+import { useGetCartQuery } from "@/redux/features/cart/cartApi";
+import { CartItem } from "@/pages/CartPage";
 
 interface ILink {
   name: string;
@@ -23,10 +25,12 @@ interface ILink {
 }
 
 export interface IUser {
+  _id: string;
   id: string;
   name: string;
   email: string;
   role: string;
+  status?: string;
   iat: number;
   exp: number;
 }
@@ -36,7 +40,9 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useAppSelector(useCurrentUser) as IUser | null;
-  // console.log(user);
+  const { data: cartData } = useGetCartQuery(user?.id);
+  const cartItems: CartItem[] = cartData?.data?.items;
+  console.log(cartItems);
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logged out successfully", { duration: 3000 });

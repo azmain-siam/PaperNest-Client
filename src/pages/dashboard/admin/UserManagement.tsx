@@ -1,7 +1,4 @@
-"use client";
-
-import { useState } from "react";
-import { MoreHorizontal, UserX, UserCheck, Mail } from "lucide-react";
+import { MoreHorizontal, UserX, UserCheck } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -16,69 +13,45 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  status: "active" | "inactive";
-  role: "user" | "admin";
-  joinDate: string;
-}
-
-const users: User[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    status: "active",
-    role: "user",
-    joinDate: "2024-01-15",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane@example.com",
-    status: "active",
-    role: "admin",
-    joinDate: "2024-01-10",
-  },
-  {
-    id: "3",
-    name: "Mike Johnson",
-    email: "mike@example.com",
-    status: "inactive",
-    role: "user",
-    joinDate: "2024-01-05",
-  },
-];
+import {
+  useGetUserQuery,
+  useUpdateUserMutation,
+} from "@/redux/features/user/userApi";
+import { IUser } from "@/components/shared/Navbar";
+import { toast } from "sonner";
 
 export default function UserManagement() {
-  const [sortedUsers, setSortedUsers] = useState(users);
+  const { data, isLoading, refetch } = useGetUserQuery(undefined);
+  const [updateUser, { error }] = useUpdateUserMutation();
+  const users = data?.data as IUser[];
 
-  const toggleUserStatus = (userId: string) => {
-    setSortedUsers(
-      users.map((user) => {
-        if (user.id === userId) {
-          return {
-            ...user,
-            status: user.status === "active" ? "inactive" : "active",
-          };
-        }
-        return user;
-      })
-    );
+  const toggleUserStatus = async (user: IUser) => {
+    try {
+      const status = user.status === "active" ? "inactive" : "active";
+
+      const res = await updateUser({ userId: user._id, status });
+
+      if (res.data.statusCode === 200) {
+        toast.success("Updated user status");
+        refetch();
+      } else {
+        toast.error("Something went wrong");
+        console.log(error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Users Management</h2>
-        <Button>Add New User</Button>
       </div>
 
       <Table>
@@ -88,13 +61,13 @@ export default function UserManagement() {
             <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Join Date</TableHead>
+            {/* <TableHead>Join Date</TableHead> */}
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sortedUsers.map((user) => (
-            <TableRow key={user.id}>
+          {users.map((user) => (
+            <TableRow key={user._id}>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>
@@ -111,7 +84,9 @@ export default function UserManagement() {
                   {user.status}
                 </Badge>
               </TableCell>
-              <TableCell>{user.joinDate}</TableCell>
+              {/* <TableCell>
+                {new Date(user.createdAt).toLocaleDateString()}
+              </TableCell> */}
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -121,7 +96,7 @@ export default function UserManagement() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem
+                    {/* <DropdownMenuItem
                       onClick={() =>
                         (window.location.href = `mailto:${user.email}`)
                       }
@@ -129,9 +104,9 @@ export default function UserManagement() {
                       <Mail className="mr-2 h-4 w-4" />
                       Send Email
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator /> */}
                     <DropdownMenuItem
-                      onClick={() => toggleUserStatus(user.id)}
+                      onClick={() => toggleUserStatus(user)}
                       className={
                         user.status === "active"
                           ? "text-red-600"

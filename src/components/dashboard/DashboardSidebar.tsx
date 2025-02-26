@@ -5,6 +5,7 @@ import {
   Package,
   ShoppingCart,
   Settings,
+  Home,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -37,14 +38,14 @@ const DashboardSidebar = () => {
       id: "orders",
       label: "My Orders",
       link: "my-orders",
-      icon: ShoppingCart, 
+      icon: ShoppingCart,
     },
     { id: "settings", label: "Settings", link: "settings", icon: Settings },
   ];
 
   const navItems = user?.role === "admin" ? adminNavItems : userNavItems;
   return (
-    <aside className="w-64 bg-white h-[calc(100vh-4rem)] shadow-sm fixed z-10">
+    <aside className="w-64 bg-white h-[calc(100vh-4rem)] shadow-sm fixed z-10 flex flex-col pb-5 justify-between">
       <nav className="p-4 space-y-2">
         {navItems.map((item) => (
           <Link to={item.link} key={item.id}>
@@ -60,6 +61,15 @@ const DashboardSidebar = () => {
           </Link>
         ))}
       </nav>
+
+      <div className="px-4">
+        <Link to={"/"}>
+          <Button className="w-full cursor-pointer h-10" variant="default">
+            <Home className="h-6 w-6" />
+            <span className="text-[17px]">Go to Home</span>
+          </Button>
+        </Link>
+      </div>
     </aside>
   );
 };
