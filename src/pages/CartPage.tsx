@@ -24,7 +24,7 @@ import { IUser } from "@/components/shared/Navbar";
 import { useAppSelector } from "@/redux/hooks";
 import { toast } from "sonner";
 
-interface CartItem {
+export interface CartItem {
   productId: {
     _id: string;
     name: string;
@@ -43,11 +43,11 @@ export default function CartPage() {
   // const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
   const [formError, setFormError] = useState("");
   const user = useAppSelector(useCurrentUser) as IUser | null;
+  console.log(user);
   const { data: cartData, isLoading, refetch } = useGetCartQuery(user?.id);
+  console.log(cartData);
   const [updateCart] = useAddToCartMutation();
-  const [removeFromCart, { data: removeData }] = useRemoveFromCartMutation();
-  console.log(removeData);
-  console.log(cartData, "cartdata");
+  const [removeFromCart] = useRemoveFromCartMutation();
 
   // const handleIncrease = async (item: CartItem) => {
   //   console.log(item.cartQuantity);
@@ -119,6 +119,8 @@ export default function CartPage() {
       sum + item.productId.price * quantity?.[idx]?.cartQuantity,
     0
   );
+
+  console.log(subtotal);
   const tax = subtotal * 0.1; // 10% tax
   const shipping = subtotal > 50 ? 0 : 5.99;
   const total = subtotal + tax + shipping;

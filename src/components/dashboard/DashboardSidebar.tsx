@@ -64,9 +64,9 @@ const DashboardSidebar = () => {
 
       <div className="px-4">
         <Link to={"/"}>
-          <Button className="w-full cursor-pointer" variant="default">
-            <Home className="h-5 w-5" />
-            <span className="">Go to home</span>
+          <Button className="w-full cursor-pointer h-10" variant="default">
+            <Home className="h-6 w-6" />
+            <span className="text-[17px]">Go to Home</span>
           </Button>
         </Link>
       </div>
