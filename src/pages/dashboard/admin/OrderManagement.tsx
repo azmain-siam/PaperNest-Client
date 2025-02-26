@@ -73,7 +73,6 @@ export default function OrdersManagement() {
     newStatus: IOrder["status"]
   ) => {
     const res = await updateOrderStatus({ orderId, status: newStatus });
-    console.log(res.data.success, "clg res");
 
     if (res.data.success) {
       toast.success("Order status updated successfully");
