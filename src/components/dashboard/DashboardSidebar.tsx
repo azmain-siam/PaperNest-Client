@@ -37,7 +37,7 @@ const DashboardSidebar = () => {
       id: "orders",
       label: "My Orders",
       link: "my-orders",
-      icon: ShoppingCart,
+      icon: ShoppingCart, 
     },
     { id: "settings", label: "Settings", link: "settings", icon: Settings },
   ];

@@ -8,6 +8,7 @@ import CartPage from "@/pages/CartPage";
 import OrdersManagement from "@/pages/dashboard/admin/OrderManagement";
 import ProductsManagement from "@/pages/dashboard/admin/ProductManagement";
 import UserManagement from "@/pages/dashboard/admin/UserManagement";
+import Orders from "@/pages/dashboard/user/Orders";
 import Home from "@/pages/Home";
 import ProductDetails from "@/pages/ProductDetails";
 import { createBrowserRouter } from "react-router-dom";
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: "users-management",
         element: <UserManagement />,
+      },
+      {
+        path: "my-orders",
+        element: <Orders />,
       },
     ],
   },

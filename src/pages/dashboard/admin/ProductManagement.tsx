@@ -12,8 +12,21 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
+import {
+  useAddProductMutation,
+  useGetAllProductsQuery,
+} from "@/redux/features/products/productsApi";
+import { useForm } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import ProductsTable from "@/components/dashboard/products/ProductsTable";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 export interface IProduct {
   _id: string;
@@ -33,10 +46,32 @@ export interface IProduct {
 }
 
 export default function ProductsManagement() {
-  const { data, isLoading } = useGetAllProductsQuery(undefined);
+  const [addProduct, { error }] = useAddProductMutation();
+  const { data, isLoading, refetch } = useGetAllProductsQuery(undefined);
   const products: IProduct[] = data?.data;
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IProduct>();
+
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+
+  const onSubmitHandler = async (data: IProduct) => {
+    const res = await addProduct(data);
+
+    if (res.data.status) {
+      toast.success("Product added successfully");
+      refetch();
+    } else {
+      toast.error("Product not added");
+      console.log(error);
+    }
+
+    setIsAddDialogOpen(false);
+  };
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -64,53 +99,143 @@ export default function ProductsManagement() {
             </DialogHeader>
 
             {/* Product adding/editing form */}
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Product Name</Label>
-                <Input
-                  id="name"
-                  defaultValue={selectedProduct?.name}
-                  placeholder="Enter product name"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit(onSubmitHandler)}>
+              <div className="grid grid-cols-2 gap-6 py-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Product Name</Label>
+                  <Input
+                    id="name"
+                    {...register("name", {
+                      required: "Product name is required",
+                    })}
+                    placeholder="Enter product name"
+                  />
+                  {errors.name && (
+                    <p className="text-red-500 text-[13px]">
+                      {errors.name.message as string}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="brand">Brand</Label>
+                  <Input
+                    id="brand"
+                    type="text"
+                    {...register("brand", { required: "Brand is required" })}
+                    placeholder="Enter brand name"
+                  />
+                  {errors.brand && (
+                    <p className="text-red-500 text-[13px]">
+                      {errors.brand.message as string}
+                    </p>
+                  )}
+                </div>
+
                 <div className="grid gap-2">
                   <Label htmlFor="price">Price</Label>
                   <Input
                     id="price"
                     type="number"
-                    defaultValue={selectedProduct?.price}
-                    placeholder="0.00"
+                    {...register("price", { required: "Price is required" })}
+                    placeholder="$0.00"
                   />
+                  {errors.price && (
+                    <p className="text-red-500 text-[13px]">
+                      {errors.price.message as string}
+                    </p>
+                  )}
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="stock">Stock</Label>
                   <Input
                     id="stock"
                     type="number"
-                    defaultValue={selectedProduct?.quantity}
+                    {...register("quantity", { required: "Stock is required" })}
                     placeholder="0"
                   />
+                  {errors.quantity && (
+                    <p className="text-red-500 text-[13px]">
+                      {errors.quantity.message as string}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select
+                    onValueChange={(value) =>
+                      setValue("category", value as IProduct["category"])
+                    }
+                    {...register("category", {
+                      required: "Category is required",
+                    })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {[
+                        "Writing",
+                        "Office Supplies",
+                        "Art Supplies",
+                        "Educational",
+                        "Technology",
+                      ].map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.category && (
+                    <p className="text-red-500 text-[13px]">
+                      {errors.category?.message as string}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-2">
+                  <Label htmlFor="image">Image</Label>
+                  <Input
+                    id="image"
+                    type="text"
+                    {...register("image")}
+                    placeholder="Enter image URL"
+                  />
+                  {errors.image && (
+                    <p className="text-red-500 text-[13px]">
+                      {errors.image.message as string}
+                    </p>
+                  )}
+                </div>
+
+                <div className="grid gap-2 col-span-2">
+                  <Label htmlFor="brand">Description</Label>
+                  <Textarea
+                    id="description"
+                    {...register("description", {
+                      required: "Description is required",
+                    })}
+                    placeholder="Enter description..."
+                  />
+                  {errors.description && (
+                    <p className="text-red-500 text-[13px]">
+                      {errors.description.message as string}
+                    </p>
+                  )}
                 </div>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="category">Category</Label>
-                <Input
-                  id="category"
-                  defaultValue={selectedProduct?.category}
-                  placeholder="Enter category"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsAddDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">Save</Button>
-            </DialogFooter>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsAddDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Save</Button>
+              </DialogFooter>
+            </form>
           </DialogContent>
         </Dialog>
       </div>

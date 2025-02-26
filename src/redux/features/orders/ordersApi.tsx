@@ -8,6 +8,12 @@ const orderApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getOrdersByUser: builder.query({
+      query: (userId) => ({
+        url: `/orders/${userId}`,
+        method: "GET",
+      }),
+    }),
     addOrder: builder.mutation({
       query: (order) => ({
         url: "/orders",
@@ -32,4 +38,5 @@ export const {
   useGetAllOrdersQuery,
   useAddOrderMutation,
   useUpdateOrderStatusMutation,
+  useGetOrdersByUserQuery,
 } = orderApi;
