@@ -25,12 +25,15 @@ interface IProductTableProps {
   products: IProduct[];
   setIsAddDialogOpen: (open: boolean) => void;
   setSelectedProduct: (product: IProduct | null) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  refetch: any;
 }
 
 const ProductsTable = ({
   products,
   setIsAddDialogOpen,
   setSelectedProduct,
+  refetch,
 }: IProductTableProps) => {
   const [deleteProduct] = useDeleteProductMutation();
 
@@ -39,6 +42,7 @@ const ProductsTable = ({
       const res = await deleteProduct(productId).unwrap();
       console.log(res);
       toast.success("Product deleted successfully");
+      refetch();
     } catch (error) {
       toast.error("Failed to delete product");
       console.log(error);

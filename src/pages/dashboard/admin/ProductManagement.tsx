@@ -244,6 +244,7 @@ export default function ProductsManagement() {
         products={products}
         setIsAddDialogOpen={setIsAddDialogOpen}
         setSelectedProduct={setSelectedProduct}
+        refetch={refetch}
       />
     </div>
   );

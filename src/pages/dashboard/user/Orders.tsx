@@ -77,7 +77,7 @@ const Orders = () => {
                   {order.products.length}{" "}
                   {order.products.length > 1 ? "items" : "item"}
                 </TableCell>
-                <TableCell>${/* {order.total.toFixed(2)} */}</TableCell>
+                <TableCell>${order.totalAmount}</TableCell>
                 <TableCell>
                   <Badge
                     variant={

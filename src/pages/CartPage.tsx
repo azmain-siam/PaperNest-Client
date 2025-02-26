@@ -23,6 +23,8 @@ import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { IUser } from "@/components/shared/Navbar";
 import { useAppSelector } from "@/redux/hooks";
 import { toast } from "sonner";
+import { useAddOrderMutation } from "@/redux/features/orders/ordersApi";
+import { Link } from "react-router-dom";
 
 export interface CartItem {
   productId: {
@@ -40,28 +42,18 @@ export interface CartItem {
 }
 
 export default function CartPage() {
-  // const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
-  const [formError, setFormError] = useState("");
+  const [formError] = useState("");
   const user = useAppSelector(useCurrentUser) as IUser | null;
-  console.log(user);
   const { data: cartData, isLoading, refetch } = useGetCartQuery(user?.id);
-  console.log(cartData);
   const [updateCart] = useAddToCartMutation();
   const [removeFromCart] = useRemoveFromCartMutation();
-
-  // const handleIncrease = async (item: CartItem) => {
-  //   console.log(item.cartQuantity);
-  //   await updateCart({
-  //     userId: user?.id,
-  //     productId: item.productId._id,
-  //     quantity: 1,
-  //   });
-
-  //   refetch();
-  // };
-  // console.log(updateCart);
-  const cartItems: CartItem[] = cartData?.data?.items;
+  const [addOrder, { error }] = useAddOrderMutation();
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [quantity, setQuantity] = useState<CartItem[]>([]);
+
+  useEffect(() => {
+    setCartItems(cartData?.data?.items);
+  }, [cartData]);
 
   useEffect(() => {
     setQuantity(cartItems);
@@ -119,23 +111,38 @@ export default function CartPage() {
       sum + item.productId.price * quantity?.[idx]?.cartQuantity,
     0
   );
-
-  console.log(subtotal);
   const tax = subtotal * 0.1; // 10% tax
   const shipping = subtotal > 50 ? 0 : 5.99;
   const total = subtotal + tax + shipping;
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   // Validate stock levels
-  //   const invalidItems = cartItems.filter((item) => item.quantity > item.stock);
-  //   if (invalidItems.length > 0) {
-  //     setFormError("Some items exceed available stock!");
-  //     return;
-  //   }
-  //   // Process order
-  //   console.log("Processing order...");
-  // };
+  const handleSubmit = async () => {
+    const products = cartItems.map((item, idx) => {
+      return {
+        productId: item.productId,
+        quantity: item.cartQuantity,
+        totalPrice: (
+          item.productId.price * quantity?.[idx]?.cartQuantity
+        ).toFixed(2),
+      };
+    });
+
+    const formData = {
+      user: user?.id,
+      products,
+      totalAmount: total.toFixed(2),
+    };
+
+    const res = await addOrder(formData);
+
+    if (res?.data?.success) {
+      toast.success(res.data.message);
+      refetch();
+    }
+    if (error && "status" in error && "data" in error && error.status === 400) {
+      const errorData = error.data as { message?: string };
+      toast.error(errorData?.message);
+    }
+  };
 
   if (isLoading || !quantity) {
     return <div>Loading...</div>;
@@ -162,7 +169,7 @@ export default function CartPage() {
             <div className="text-center py-12">
               <p className="text-gray-500">Your cart is empty</p>
               <Button className="mt-4" asChild>
-                <a href="/products">Continue Shopping</a>
+                <Link to="/products">Continue Shopping</Link>
               </Button>
             </div>
           ) : (
@@ -269,10 +276,7 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <form
-                  // onSubmit={handleSubmit}
-                  className="space-y-4"
-                >
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
                     <Input id="name" required />
@@ -305,11 +309,7 @@ export default function CartPage() {
                     <AlertDescription>{formError}</AlertDescription>
                   </Alert>
                 )}
-                <Button
-                  className="w-full"
-                  size="lg"
-                  // onClick={handleSubmit}
-                >
+                <Button className="w-full" size="lg" onClick={handleSubmit}>
                   Place Order
                 </Button>
               </CardFooter>
