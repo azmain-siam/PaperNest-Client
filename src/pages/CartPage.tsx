@@ -82,7 +82,9 @@ export default function CartPage() {
   }, [cartData]);
 
   useEffect(() => {
-    setQuantity(cartItems);
+    if (cartItems) {
+      setQuantity(cartItems);
+    }
   }, [cartItems]);
 
   const handleIncrease = (item: CartItem) => {
@@ -269,7 +271,7 @@ export default function CartPage() {
         </motion.div>
 
         {/* Order Summary */}
-        {cartItems.length > 0 && (
+        {cartItems && cartItems.length > 0 && (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
