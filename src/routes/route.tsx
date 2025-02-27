@@ -1,4 +1,6 @@
 import App from "@/App";
+import WelcomeSection from "@/components/dashboard/DashboardHome";
+import AdminRoute from "@/layouts/AdminRoute";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import ProtectedRoute from "@/layouts/ProtectedRoute";
 import AboutPage from "@/pages/About";
@@ -8,6 +10,7 @@ import CartPage from "@/pages/CartPage";
 import OrdersManagement from "@/pages/dashboard/admin/OrderManagement";
 import ProductsManagement from "@/pages/dashboard/admin/ProductManagement";
 import UserManagement from "@/pages/dashboard/admin/UserManagement";
+import ManageProfile from "@/pages/dashboard/user/ManageProfile";
 import Orders from "@/pages/dashboard/user/Orders";
 import Home from "@/pages/Home";
 import ProductDetails from "@/pages/ProductDetails";
@@ -50,23 +53,47 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
+        index: true,
+        element: <WelcomeSection />,
+      },
+      {
         path: "manage-orders",
-        element: <OrdersManagement />,
+        element: (
+          <AdminRoute>
+            <OrdersManagement />
+          </AdminRoute>
+        ),
       },
       {
         path: "product-management",
-        element: <ProductsManagement />,
+        element: (
+          <AdminRoute>
+            <ProductsManagement />
+          </AdminRoute>
+        ),
       },
       {
         path: "users-management",
-        element: <UserManagement />,
+        element: (
+          <AdminRoute>
+            <UserManagement />
+          </AdminRoute>
+        ),
       },
       {
         path: "my-orders",
         element: <Orders />,
+      },
+      {
+        path: "manage-profile",
+        element: <ManageProfile />,
       },
     ],
   },

@@ -18,6 +18,7 @@ import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { IUser } from "@/components/shared/Navbar";
 import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
 import { toast } from "sonner";
+import { Loader } from "@/components/shared/Loader";
 
 const ProductDetails = () => {
   const { productId } = useParams();
@@ -54,7 +55,7 @@ const ProductDetails = () => {
   };
 
   if (isLoading || isProductsLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
@@ -72,10 +73,7 @@ const ProductDetails = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-              src={
-                // selectedImage.url ||
-                placeholder
-              }
+              src={product.image || placeholder}
               alt={"selectedImage.alt"}
               className="h-full w-full object-cover object-center"
             />

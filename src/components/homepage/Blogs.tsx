@@ -71,7 +71,9 @@ export default function BlogSection() {
             >
               <div className="overflow-hidden">
                 <img
-                  src={blog.image || "/placeholder.svg"}
+                  src={
+                    "https://i.ibb.co.com/V03q4kbJ/stock-photo-school-stationary-wooden-table.jpg"
+                  }
                   alt={blog.title}
                   className="w-full h-48 object-cover transition-transform hover:scale-105 duration-300"
                 />
@@ -81,7 +83,7 @@ export default function BlogSection() {
                 <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
                 <p className="text-gray-600 mb-4">{blog.excerpt}</p>
                 <motion.a
-                  href={`/blog/${blog.id}`}
+                  href="#"
                   className="text-primary font-medium hover:underline inline-block"
                   whileHover={{ x: 5 }}
                   transition={{ type: "spring", stiffness: 300 }}

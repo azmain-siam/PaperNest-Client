@@ -23,10 +23,13 @@ interface ILink {
 }
 
 export interface IUser {
+  _id: string;
   id: string;
   name: string;
   email: string;
   role: string;
+  status?: string;
+  address?: string;
   iat: number;
   exp: number;
 }
@@ -36,7 +39,6 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useAppSelector(useCurrentUser) as IUser | null;
-  // console.log(user);
   const handleLogout = () => {
     dispatch(logout());
     toast.success("Logged out successfully", { duration: 3000 });

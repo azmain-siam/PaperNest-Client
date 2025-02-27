@@ -21,6 +21,13 @@ const productsApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    updateProduct: builder.mutation({
+      query: (data) => ({
+        url: `/products/${data._id}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
     deleteProduct: builder.mutation({
       query: (productId) => ({
         url: `/products/${productId}`,
@@ -35,4 +42,5 @@ export const {
   useGetProductByIdQuery,
   useAddProductMutation,
   useDeleteProductMutation,
+  useUpdateProductMutation,
 } = productsApi;

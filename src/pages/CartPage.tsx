@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Minus, Plus, Trash2, AlertCircle } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import placeholder from "@/assets/images/card-placeholder.jpeg";
 import {
   useAddToCartMutation,
@@ -23,8 +22,14 @@ import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { IUser } from "@/components/shared/Navbar";
 import { useAppSelector } from "@/redux/hooks";
 import { toast } from "sonner";
+import { useAddOrderMutation } from "@/redux/features/orders/ordersApi";
+import { Link } from "react-router-dom";
+// import { CheckoutModal } from "@/components/checkout/CheckoutModal";
+import StripePaymentModal from "@/components/checkout/CheckoutForm";
+import { useGetUserByIdQuery } from "@/redux/features/user/userApi";
+import { Loader } from "@/components/shared/Loader";
 
-interface CartItem {
+export interface CartItem {
   productId: {
     _id: string;
     name: string;
@@ -40,31 +45,47 @@ interface CartItem {
 }
 
 export default function CartPage() {
-  // const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
-  const [formError, setFormError] = useState("");
   const user = useAppSelector(useCurrentUser) as IUser | null;
   const { data: cartData, isLoading, refetch } = useGetCartQuery(user?.id);
   const [updateCart] = useAddToCartMutation();
-  const [removeFromCart, { data: removeData }] = useRemoveFromCartMutation();
-  console.log(removeData);
-  console.log(cartData, "cartdata");
-
-  // const handleIncrease = async (item: CartItem) => {
-  //   console.log(item.cartQuantity);
-  //   await updateCart({
-  //     userId: user?.id,
-  //     productId: item.productId._id,
-  //     quantity: 1,
-  //   });
-
-  //   refetch();
-  // };
-  // console.log(updateCart);
-  const cartItems: CartItem[] = cartData?.data?.items;
+  const [removeFromCart] = useRemoveFromCartMutation();
+  const [addOrder, { error }] = useAddOrderMutation();
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [quantity, setQuantity] = useState<CartItem[]>([]);
+  const { data } = useGetUserByIdQuery({
+    userId: user?.id,
+  });
+  const userData = data?.data;
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    address: "",
+    city: "",
+    postal: "",
+  });
 
   useEffect(() => {
-    setQuantity(cartItems);
+    if (userData) {
+      setFormData((prev) => ({
+        ...prev,
+        address: userData.address || "",
+      }));
+    }
+  }, [userData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  useEffect(() => {
+    setCartItems(cartData?.data?.items);
+  }, [cartData]);
+
+  useEffect(() => {
+    if (cartItems) {
+      setQuantity(cartItems);
+    }
   }, [cartItems]);
 
   const handleIncrease = (item: CartItem) => {
@@ -123,20 +144,37 @@ export default function CartPage() {
   const shipping = subtotal > 50 ? 0 : 5.99;
   const total = subtotal + tax + shipping;
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   // Validate stock levels
-  //   const invalidItems = cartItems.filter((item) => item.quantity > item.stock);
-  //   if (invalidItems.length > 0) {
-  //     setFormError("Some items exceed available stock!");
-  //     return;
-  //   }
-  //   // Process order
-  //   console.log("Processing order...");
-  // };
+  const handleSubmit = async () => {
+    const products = cartItems.map((item, idx) => {
+      return {
+        productId: item.productId,
+        quantity: item.cartQuantity,
+        totalPrice: (
+          item.productId.price * quantity?.[idx]?.cartQuantity
+        ).toFixed(2),
+      };
+    });
+
+    const formData = {
+      user: user?.id,
+      products,
+      totalAmount: total.toFixed(2),
+    };
+
+    const res = await addOrder(formData);
+
+    if (res?.data?.success) {
+      toast.success(res.data.message);
+      refetch();
+    }
+    if (error && "status" in error && "data" in error && error.status === 400) {
+      const errorData = error.data as { message?: string };
+      toast.error(errorData?.message);
+    }
+  };
 
   if (isLoading || !quantity) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
@@ -160,7 +198,7 @@ export default function CartPage() {
             <div className="text-center py-12">
               <p className="text-gray-500">Your cart is empty</p>
               <Button className="mt-4" asChild>
-                <a href="/products">Continue Shopping</a>
+                <Link to="/products">Continue Shopping</Link>
               </Button>
             </div>
           ) : (
@@ -234,7 +272,7 @@ export default function CartPage() {
         </motion.div>
 
         {/* Order Summary */}
-        {cartItems.length > 0 && (
+        {cartItems && cartItems.length > 0 && (
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -267,49 +305,48 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <form
-                  // onSubmit={handleSubmit}
-                  className="space-y-4"
-                >
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" required />
+                    <Input onChange={handleChange} id="name" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" required />
+                    <Input
+                      onChange={handleChange}
+                      id="email"
+                      type="email"
+                      required
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="address">Shipping Address</Label>
-                    <Input id="address" required />
+                    <Input
+                      onChange={handleChange}
+                      id="address"
+                      required
+                      defaultValue={userData?.address}
+                    />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="city">City</Label>
-                      <Input id="city" required />
+                      <Input onChange={handleChange} id="city" required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="postal">Postal Code</Label>
-                      <Input id="postal" required />
+                      <Input onChange={handleChange} id="postal" required />
                     </div>
                   </div>
                 </form>
               </CardContent>
+
               <CardFooter className="flex flex-col">
-                {formError && (
-                  <Alert variant="destructive" className="mb-4">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>{formError}</AlertDescription>
-                  </Alert>
-                )}
-                <Button
-                  className="w-full"
-                  size="lg"
-                  // onClick={handleSubmit}
-                >
-                  Place Order
-                </Button>
+                <StripePaymentModal
+                  handleSubmit={handleSubmit}
+                  amount={total}
+                  formData={formData}
+                />
               </CardFooter>
             </Card>
           </motion.div>

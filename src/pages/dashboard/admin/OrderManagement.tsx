@@ -23,6 +23,7 @@ import {
 } from "@/redux/features/orders/ordersApi";
 import { IUser } from "@/components/shared/Navbar";
 import { toast } from "sonner";
+import { Loader } from "@/components/shared/Loader";
 
 export interface IOrder {
   _id: string;
@@ -33,6 +34,7 @@ export interface IOrder {
     totalPrice: number;
   }[];
   status: "pending" | "shipping" | "cancelled" | "delivered";
+  totalAmount: number;
   createdAt: string;
 }
 
@@ -54,7 +56,7 @@ export default function OrdersManagement() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
@@ -88,7 +90,7 @@ export default function OrdersManagement() {
                   {order.products.length}{" "}
                   {order.products.length > 1 ? "items" : "item"}
                 </TableCell>
-                <TableCell>${/* {order.total.toFixed(2)} */}</TableCell>
+                <TableCell>${order.totalAmount}</TableCell>
                 <TableCell>
                   <Badge
                     variant={
