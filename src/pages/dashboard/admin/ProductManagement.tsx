@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import {
   useAddProductMutation,
   useGetAllProductsQuery,
+  useUpdateProductMutation,
 } from "@/redux/features/products/productsApi";
 import { useForm } from "react-hook-form";
 import {
@@ -46,31 +47,94 @@ export interface IProduct {
 }
 
 export default function ProductsManagement() {
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [addProduct, { error }] = useAddProductMutation();
+  const [updateProduct, { error: updateError }] = useUpdateProductMutation();
   const { data, isLoading, refetch } = useGetAllProductsQuery(undefined);
   const products: IProduct[] = data?.data;
   const {
     register,
     handleSubmit,
     setValue,
+    // watch,
+    reset,
     formState: { errors },
-  } = useForm<IProduct>();
+  } = useForm<IProduct>({
+    defaultValues: selectedProduct || {
+      name: "",
+      brand: "",
+      price: 0,
+      quantity: 0,
+      category: undefined,
+      image: "",
+      description: "",
+    },
+  });
 
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
+  useEffect(() => {
+    reset(
+      selectedProduct || {
+        name: "",
+        brand: "",
+        price: 0,
+        quantity: 0,
+        category: undefined,
+        image: "",
+        description: "",
+      }
+    );
+  }, [selectedProduct, reset]);
+
+  console.log(updateError, "selectedProduct");
+
+  // const onSubmitHandler = async (data: IProduct) => {
+  //   const res = await addProduct(data);
+
+  //   if (res.data.status) {
+  //     toast.success("Product added successfully");
+  //     refetch();
+  //   } else {
+  //     toast.error("Product not added");
+  //     console.log(error);
+  //   }
+
+  //   setIsAddDialogOpen(false);
+  // };
 
   const onSubmitHandler = async (data: IProduct) => {
-    const res = await addProduct(data);
+    console.log(data);
+    try {
+      let res;
 
-    if (res.data.status) {
-      toast.success("Product added successfully");
+      if (selectedProduct) {
+        // Update existing product
+        res = await updateProduct(data); // Assuming `updateProduct` takes the product ID and the new data
+        if (res.data.status) {
+          toast.success("Product updated successfully");
+        } else {
+          toast.error("Product not updated");
+          console.log(updateError);
+        }
+      } else {
+        // Add new product
+        res = await addProduct(data);
+        if (res.data.status) {
+          toast.success("Product added successfully");
+        } else {
+          toast.error("Product not added");
+          console.log(error);
+        }
+      }
+
+      // Refetch the data after success
       refetch();
-    } else {
-      toast.error("Product not added");
-      console.log(error);
+    } catch (error) {
+      toast.error("Something went wrong");
+      console.error(error);
+    } finally {
+      setIsAddDialogOpen(false);
     }
-
-    setIsAddDialogOpen(false);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -81,7 +145,7 @@ export default function ProductsManagement() {
         <h2 className="text-2xl font-bold">Products Management</h2>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button onClick={() => setSelectedProduct(null)}>
               <Plus className="mr-2 h-4 w-4" />
               Add Product
             </Button>
@@ -137,6 +201,7 @@ export default function ProductsManagement() {
                   <Input
                     id="price"
                     type="number"
+                    step="any"
                     {...register("price", { required: "Price is required" })}
                     placeholder="$0.00"
                   />

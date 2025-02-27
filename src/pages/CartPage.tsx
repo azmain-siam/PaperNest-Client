@@ -51,7 +51,7 @@ export default function CartPage() {
   const [addOrder, { error }] = useAddOrderMutation();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [quantity, setQuantity] = useState<CartItem[]>([]);
-  const { data, isLoading: isUserLoading } = useGetUserByIdQuery({
+  const { data } = useGetUserByIdQuery({
     userId: user?.id,
   });
   const userData = data?.data;
@@ -169,72 +169,6 @@ export default function CartPage() {
       toast.error(errorData?.message);
     }
   };
-
-  // const handleSubmitt = async (event) => {
-  //   event.preventDefault();
-
-  //   if (!stripe || !elements) {
-  //     return;
-  //   }
-
-  //   const card = elements.getElement(CardElement);
-
-  //   if (card === null) {
-  //     return;
-  //   }
-
-  //   const { error, paymentMethod } = await stripe.createPaymentMethod({
-  //     type: "card",
-  //     card,
-  //   });
-
-  //   if (error) {
-  //     // console.log("[error]", error);
-  //     setIsError(error.message);
-  //   } else {
-  //     console.log("[PaymentMethod]", paymentMethod);
-  //     setIsError("");
-  //   }
-
-  //   // confirm payment
-  //   const { paymentIntent, error: confirmError } =
-  //     await stripe.confirmCardPayment(clientSecret, {
-  //       payment_method: {
-  //         card: card,
-  //         billing_details: {
-  //           email: user?.email || "annonymous",
-  //           name: user?.displayName || "annonymous",
-  //         },
-  //       },
-  //     });
-
-  //   if (confirmError) {
-  //     console.log("confirm error", confirmError.message);
-  //   } else {
-  //     // console.log("payment intent", paymentIntent);
-  //     if (paymentIntent.status === "succeeded") {
-  //       Swal.fire({
-  //         title: "Payment Successful!",
-  //         icon: "success",
-  //       });
-  //       const payment = {
-  //         email: user.email,
-  //         name: user.displayName,
-  //         transactionId: paymentIntent.id,
-  //         amount: price,
-  //         data: new Date(),
-  //         status: "success",
-  //       };
-  //       try {
-  //         const { data } = await axiosSecure.post("/funds", payment);
-  //         navigate("/fundings");
-  //         return data;
-  //       } catch (err) {
-  //         toast.error(err.message);
-  //       }
-  //     }
-  //   }
-  // };
 
   if (isLoading || !quantity) {
     return <div>Loading...</div>;

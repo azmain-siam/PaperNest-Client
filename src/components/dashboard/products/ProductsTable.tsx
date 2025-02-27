@@ -86,6 +86,7 @@ const ProductsTable = ({
                       <DropdownMenuLabel>Actions</DropdownMenuLabel>
                       <DropdownMenuItem
                         onClick={() => {
+                          console.log("Selected Product Before:");
                           setSelectedProduct(product);
                           setIsAddDialogOpen(true);
                         }}
