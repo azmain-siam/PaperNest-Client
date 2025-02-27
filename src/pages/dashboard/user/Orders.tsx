@@ -26,6 +26,7 @@ import { toast } from "sonner";
 import { IUser } from "@/components/shared/Navbar";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
+import { Loader } from "@/components/shared/Loader";
 
 const Orders = () => {
   const user = useAppSelector(useCurrentUser) as IUser | null;
@@ -46,7 +47,7 @@ const Orders = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
   return (
     <div className="space-y-4">

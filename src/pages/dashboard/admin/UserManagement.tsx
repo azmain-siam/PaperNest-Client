@@ -22,6 +22,7 @@ import {
 } from "@/redux/features/user/userApi";
 import { IUser } from "@/components/shared/Navbar";
 import { toast } from "sonner";
+import { Loader } from "@/components/shared/Loader";
 
 export default function UserManagement() {
   const { data, isLoading, refetch } = useGetUserQuery(undefined);
@@ -46,7 +47,7 @@ export default function UserManagement() {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
 
   return (
     <div className="space-y-4">

@@ -27,6 +27,7 @@ import { Link } from "react-router-dom";
 // import { CheckoutModal } from "@/components/checkout/CheckoutModal";
 import StripePaymentModal from "@/components/checkout/CheckoutForm";
 import { useGetUserByIdQuery } from "@/redux/features/user/userApi";
+import { Loader } from "@/components/shared/Loader";
 
 export interface CartItem {
   productId: {
@@ -173,7 +174,7 @@ export default function CartPage() {
   };
 
   if (isLoading || !quantity) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (

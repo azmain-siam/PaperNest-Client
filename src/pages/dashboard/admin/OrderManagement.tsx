@@ -23,6 +23,7 @@ import {
 } from "@/redux/features/orders/ordersApi";
 import { IUser } from "@/components/shared/Navbar";
 import { toast } from "sonner";
+import { Loader } from "@/components/shared/Loader";
 
 export interface IOrder {
   _id: string;
@@ -55,7 +56,7 @@ export default function OrdersManagement() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (

@@ -37,7 +37,7 @@ export default function ProductsPage() {
     useState<IProduct[]>(products);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
-  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [priceRange, setPriceRange] = useState([0, 1000]);
   const [showInStock, setShowInStock] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
@@ -79,7 +79,7 @@ export default function ProductsPage() {
 
     if (showInStock) newActiveFilters.push("In Stock Only");
 
-    if (priceRange[0] > 0 || priceRange[1] < 100)
+    if (priceRange[0] > 0 || priceRange[1] < 500)
       newActiveFilters.push(`$${priceRange[0]} - $${priceRange[1]}`);
 
     setActiveFilters(newActiveFilters);

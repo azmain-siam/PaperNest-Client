@@ -28,6 +28,7 @@ import {
 import ProductsTable from "@/components/dashboard/products/ProductsTable";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { Loader } from "@/components/shared/Loader";
 
 export interface IProduct {
   _id: string;
@@ -137,7 +138,7 @@ export default function ProductsManagement() {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
 
   return (
     <div className="space-y-4">
