@@ -40,7 +40,12 @@ const DashboardSidebar = () => {
       link: "my-orders",
       icon: ShoppingCart,
     },
-    { id: "settings", label: "Settings", link: "settings", icon: Settings },
+    {
+      id: "settings",
+      label: "Settings",
+      link: "manage-profile",
+      icon: Settings,
+    },
   ];
 
   const navItems = user?.role === "admin" ? adminNavItems : userNavItems;
