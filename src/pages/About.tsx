@@ -69,11 +69,11 @@ export default function AboutPage() {
       <section className="relative h-[500px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="/placeholder.svg?height=500&width=1920"
+            src="https://i.ibb.co.com/4R9WNWB0/rsz-1joanna-kosinska-bf2vsubyhcq-unsplash.jpg"
             alt="About Us Hero"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/60" />
+          <div className="absolute inset-0 bg-black/40" />
         </div>
         <motion.div
           initial="hidden"
@@ -118,7 +118,7 @@ export default function AboutPage() {
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden">
               <img
-                src="/placeholder.svg?height=400&width=600"
+                src="https://i.ibb.co.com/4wmP6mFV/rsz-jason-leung-gwzzetd0ad4-unsplash.jpg"
                 alt="Our Story"
                 className="w-full h-full object-cover"
               />
