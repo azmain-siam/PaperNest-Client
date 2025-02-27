@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Minus, Plus, Trash2, AlertCircle } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import placeholder from "@/assets/images/card-placeholder.jpeg";
 import {
   useAddToCartMutation,
@@ -385,7 +384,7 @@ export default function CartPage() {
                   </div>
                 </form>
               </CardContent>
-              
+
               <CardFooter className="flex flex-col">
                 <StripePaymentModal
                   handleSubmit={handleSubmit}
