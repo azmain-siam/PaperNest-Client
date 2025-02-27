@@ -26,6 +26,7 @@ import { useAddOrderMutation } from "@/redux/features/orders/ordersApi";
 import { Link } from "react-router-dom";
 // import { CheckoutModal } from "@/components/checkout/CheckoutModal";
 import StripePaymentModal from "@/components/checkout/CheckoutForm";
+import { useGetUserByIdQuery } from "@/redux/features/user/userApi";
 
 export interface CartItem {
   productId: {
@@ -50,6 +51,10 @@ export default function CartPage() {
   const [addOrder, { error }] = useAddOrderMutation();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [quantity, setQuantity] = useState<CartItem[]>([]);
+  const { data, isLoading: isUserLoading } = useGetUserByIdQuery({
+    userId: user?.id,
+  });
+  const userData = data?.data;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -58,6 +63,15 @@ export default function CartPage() {
     city: "",
     postal: "",
   });
+
+  useEffect(() => {
+    if (userData) {
+      setFormData((prev) => ({
+        ...prev,
+        address: userData.address || "",
+      }));
+    }
+  }, [userData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -370,7 +384,12 @@ export default function CartPage() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="address">Shipping Address</Label>
-                    <Input onChange={handleChange} id="address" required />
+                    <Input
+                      onChange={handleChange}
+                      id="address"
+                      required
+                      defaultValue={userData?.address}
+                    />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">

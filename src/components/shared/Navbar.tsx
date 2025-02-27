@@ -29,6 +29,7 @@ export interface IUser {
   email: string;
   role: string;
   status?: string;
+  address?: string;
   iat: number;
   exp: number;
 }

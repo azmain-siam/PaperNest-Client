@@ -8,6 +8,12 @@ const userApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getUserById: builder.query({
+      query: ({ userId }) => ({
+        url: `/user/${userId}`,
+        method: "GET",
+      }),
+    }),
     updateUser: builder.mutation({
       query: ({ userId, status }) => {
         console.log(userId, status);
@@ -18,7 +24,22 @@ const userApi = baseApi.injectEndpoints({
         };
       },
     }),
+    updateUserAddress: builder.mutation({
+      query: ({ userId, address }) => {
+        console.log(userId, address);
+        return {
+          url: `/user/update/address/${userId}`,
+          method: "PATCH",
+          body: { address },
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetUserQuery, useUpdateUserMutation } = userApi;
+export const {
+  useGetUserQuery,
+  useUpdateUserMutation,
+  useUpdateUserAddressMutation,
+  useGetUserByIdQuery,
+} = userApi;

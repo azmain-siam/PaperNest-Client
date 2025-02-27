@@ -1,28 +1,60 @@
-import { useState } from "react";
+import { IUser } from "@/components/shared/Navbar";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
+import {
+  useGetUserByIdQuery,
+  useUpdateUserAddressMutation,
+} from "@/redux/features/user/userApi";
+import { useAppSelector } from "@/redux/hooks";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const ManageProfile = () => {
-  const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    address: "123 Main St, City, Country",
-  });
+  const user = useAppSelector(useCurrentUser) as IUser;
+
+  const { data, isLoading, refetch } = useGetUserByIdQuery({ userId: user.id });
+  const userData = data?.data;
+  console.log(userData, "user data");
+
+  const [updateUserAddress, { error }] = useUpdateUserAddressMutation();
 
   const [editMode, setEditMode] = useState(false);
-  const [newAddress, setNewAddress] = useState(profile.address);
+  const [newAddress, setNewAddress] = useState("");
 
-  const handleSave = () => {
-    setProfile({ ...profile, address: newAddress });
+  useEffect(() => {
+    if (userData) {
+      setNewAddress(userData?.address);
+    }
+  }, [userData]);
+
+  const handleSave = async () => {
+    const res = await updateUserAddress({
+      userId: user.id,
+      address: newAddress,
+    });
+
+    if (res.data.statusCode === 200) {
+      toast.success("Updated user address");
+      refetch();
+    } else {
+      toast.error("Something went wrong");
+      console.log(error);
+    }
     setEditMode(false);
   };
+
+  if (isLoading) {
+    return;
+  }
+
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-xl font-bold mb-4">User Profile</h2>
       <div className="mb-4">
         <p>
-          <strong>Name:</strong> {profile.name}
+          <strong>Name:</strong> {user?.name}
         </p>
         <p>
-          <strong>Email:</strong> {profile.email}
+          <strong>Email:</strong> {user?.email}
         </p>
       </div>
       <div className="mb-4">
@@ -37,7 +69,7 @@ const ManageProfile = () => {
             className="w-full border p-2 rounded-md"
           />
         ) : (
-          <p>{profile.address}</p>
+          <p>{userData?.address || "No saved address"}</p>
         )}
       </div>
       <div className="flex gap-2">
