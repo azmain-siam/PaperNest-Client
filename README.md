@@ -1,50 +1,119 @@
-# React + TypeScript + Vite
+# 📚 PaperNest - Premium Stationery E-commerce
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+PaperNest is a modern e-commerce platform specializing in premium stationery and art supplies. Built with Next.js and TypeScript, it offers a seamless shopping experience with features like real-time inventory management and role-based access control.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🛍️ **Product Management**
+  - Comprehensive product catalog
+  - Real-time inventory tracking
+  - Dynamic product filtering and search
+  - Detailed product pages with image galleries
 
-## Expanding the ESLint configuration
+- 👤 **User Management**
+  - Role-based access control (Admin/User)
+  - User profile management
+  - Secure authentication
+  - Address management
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- 🛒 **Shopping Experience**
+  - Intuitive shopping cart
+  - Wishlist functionality
+  - Responsive design
+  - Real-time order tracking
 
-- Configure the top-level `parserOptions` property like this:
+- 📊 **Admin Dashboard**
+  - Sales analytics
+  - Order management
+  - User management
+  - Inventory control
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🚀 Tech Stack
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- **Frontend:**
+  - Vite + React
+  - TypeScript
+  - Tailwind CSS
+  - Framer Motion
+  - shadcn/ui
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **UI Components:**
+  - Custom reusable components
+  - Responsive layouts
+  - Dark mode support
+  - Loading states and animations
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## 📦 Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/papernest.git
+   cd papernest
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add necessary variables:
+   ```env
+   NEXT_PUBLIC_API_URL=your_api_url
+   # Add other required environment variables
+   ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 💻 Usage
+
+### User Dashboard
+
+Access your personal dashboard at `/dashboard` to:
+- View order history
+- Manage profile settings
+- Update shipping addresses
+- Track current orders
+
+### Admin Dashboard
+
+Access the admin panel at `/dashboard` to:
+- Manage products and inventory
+- Process orders
+- View analytics
+- Manage user accounts
+
+## 🤝 Contributing
+
+We welcome contributions to PaperNest! Please follow these steps:
+
+1. Fork the repository
+2. Create a new branch: `git checkout -b feature/your-feature`
+3. Make your changes
+4. Commit your changes: `git commit -m 'Add some feature'`
+5. Push to the branch: `git push origin feature/your-feature`
+6. Submit a pull request
+
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com) for the beautiful UI components
+- [Lucide Icons](https://lucide.dev) for the icon set
+- [Tailwind CSS](https://tailwindcss.com) for the styling system
+- [Framer Motion](https://www.framer.com/motion/) for animations
+
+
+<p align="center">Made with ❤️ by Siam</p>
