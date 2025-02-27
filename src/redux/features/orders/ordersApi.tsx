@@ -31,6 +31,15 @@ const orderApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getClientSecret: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/orders/payment`,
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
   }),
 });
 
@@ -39,4 +48,5 @@ export const {
   useAddOrderMutation,
   useUpdateOrderStatusMutation,
   useGetOrdersByUserQuery,
+  useGetClientSecretMutation,
 } = orderApi;

@@ -25,6 +25,8 @@ import { useAppSelector } from "@/redux/hooks";
 import { toast } from "sonner";
 import { useAddOrderMutation } from "@/redux/features/orders/ordersApi";
 import { Link } from "react-router-dom";
+// import { CheckoutModal } from "@/components/checkout/CheckoutModal";
+import StripePaymentModal from "@/components/checkout/CheckoutForm";
 
 export interface CartItem {
   productId: {
@@ -42,7 +44,6 @@ export interface CartItem {
 }
 
 export default function CartPage() {
-  const [formError] = useState("");
   const user = useAppSelector(useCurrentUser) as IUser | null;
   const { data: cartData, isLoading, refetch } = useGetCartQuery(user?.id);
   const [updateCart] = useAddToCartMutation();
@@ -50,6 +51,18 @@ export default function CartPage() {
   const [addOrder, { error }] = useAddOrderMutation();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [quantity, setQuantity] = useState<CartItem[]>([]);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    address: "",
+    city: "",
+    postal: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
   useEffect(() => {
     setCartItems(cartData?.data?.items);
@@ -143,6 +156,72 @@ export default function CartPage() {
       toast.error(errorData?.message);
     }
   };
+
+  // const handleSubmitt = async (event) => {
+  //   event.preventDefault();
+
+  //   if (!stripe || !elements) {
+  //     return;
+  //   }
+
+  //   const card = elements.getElement(CardElement);
+
+  //   if (card === null) {
+  //     return;
+  //   }
+
+  //   const { error, paymentMethod } = await stripe.createPaymentMethod({
+  //     type: "card",
+  //     card,
+  //   });
+
+  //   if (error) {
+  //     // console.log("[error]", error);
+  //     setIsError(error.message);
+  //   } else {
+  //     console.log("[PaymentMethod]", paymentMethod);
+  //     setIsError("");
+  //   }
+
+  //   // confirm payment
+  //   const { paymentIntent, error: confirmError } =
+  //     await stripe.confirmCardPayment(clientSecret, {
+  //       payment_method: {
+  //         card: card,
+  //         billing_details: {
+  //           email: user?.email || "annonymous",
+  //           name: user?.displayName || "annonymous",
+  //         },
+  //       },
+  //     });
+
+  //   if (confirmError) {
+  //     console.log("confirm error", confirmError.message);
+  //   } else {
+  //     // console.log("payment intent", paymentIntent);
+  //     if (paymentIntent.status === "succeeded") {
+  //       Swal.fire({
+  //         title: "Payment Successful!",
+  //         icon: "success",
+  //       });
+  //       const payment = {
+  //         email: user.email,
+  //         name: user.displayName,
+  //         transactionId: paymentIntent.id,
+  //         amount: price,
+  //         data: new Date(),
+  //         status: "success",
+  //       };
+  //       try {
+  //         const { data } = await axiosSecure.post("/funds", payment);
+  //         navigate("/fundings");
+  //         return data;
+  //       } catch (err) {
+  //         toast.error(err.message);
+  //       }
+  //     }
+  //   }
+  // };
 
   if (isLoading || !quantity) {
     return <div>Loading...</div>;
@@ -279,39 +358,40 @@ export default function CartPage() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" required />
+                    <Input onChange={handleChange} id="name" required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" required />
+                    <Input
+                      onChange={handleChange}
+                      id="email"
+                      type="email"
+                      required
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="address">Shipping Address</Label>
-                    <Input id="address" required />
+                    <Input onChange={handleChange} id="address" required />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="city">City</Label>
-                      <Input id="city" required />
+                      <Input onChange={handleChange} id="city" required />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="postal">Postal Code</Label>
-                      <Input id="postal" required />
+                      <Input onChange={handleChange} id="postal" required />
                     </div>
                   </div>
                 </form>
               </CardContent>
+              
               <CardFooter className="flex flex-col">
-                {formError && (
-                  <Alert variant="destructive" className="mb-4">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Error</AlertTitle>
-                    <AlertDescription>{formError}</AlertDescription>
-                  </Alert>
-                )}
-                <Button className="w-full" size="lg" onClick={handleSubmit}>
-                  Place Order
-                </Button>
+                <StripePaymentModal
+                  handleSubmit={handleSubmit}
+                  amount={total}
+                  formData={formData}
+                />
               </CardFooter>
             </Card>
           </motion.div>
