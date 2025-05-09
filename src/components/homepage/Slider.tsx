@@ -48,7 +48,7 @@ export default function BannerSlider() {
   };
 
   return (
-    <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mt-6 mx-auto">
+    <div className="max-w-7xl px-4  mt-6 mx-auto">
       <div className="relative overflow-hidden rounded-2xl">
         <div
           className="flex transition-transform duration-500 ease-in-out"

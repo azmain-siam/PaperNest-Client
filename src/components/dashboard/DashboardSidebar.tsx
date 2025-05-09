@@ -50,7 +50,7 @@ const DashboardSidebar = () => {
 
   const navItems = user?.role === "admin" ? adminNavItems : userNavItems;
   return (
-    <aside className="w-64 bg-white h-[calc(100vh-4rem)] shadow-sm fixed z-10 flex flex-col pb-5 justify-between">
+    <aside className="w-32 md:w-64 bg-white h-[calc(100vh-4rem)] shadow-sm fixed z-10 flex flex-col pb-5 justify-between">
       <nav className="p-4 space-y-2">
         {navItems.map((item) => (
           <Link to={item.link} key={item.id}>

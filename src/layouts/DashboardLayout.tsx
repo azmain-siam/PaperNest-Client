@@ -9,7 +9,7 @@ export default function Dashboard() {
       <DashboardHeader />
 
       <div className="flex">
-        <div className="hidden md:block md:relative h-full">
+        <div className="md:relative h-full">
           <DashboardSidebar />
         </div>
 

@@ -1,4 +1,13 @@
-import { ShoppingCart, Menu, X, User, Settings } from "lucide-react";
+import {
+  ShoppingCart,
+  Menu,
+  X,
+  User,
+  Settings,
+  ChevronDown,
+  Sofa,
+  ChevronRight,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Link, NavLink } from "react-router-dom";
@@ -45,8 +54,8 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white dark:bg-transparent dark:border-b shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-white dark:bg-transparent dark:border-b shadow-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 ">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="text-xl md:text-2xl font-bold text-primary">
@@ -70,6 +79,40 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-1 p-0 text-base active:ring-0 font-medium text-foreground/60 hover:text-foreground hover:bg-transparent"
+                >
+                  Categories
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-[220px] *:py-2 *:text-sm"
+              >
+                <DropdownMenuItem>
+                  <Link
+                    to="/products?categories=furniture"
+                    className="flex items-center gap-1.5 w-full"
+                  >
+                    <Sofa /> Furniture
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator className="!p-0" />
+                <DropdownMenuItem>
+                  <Link
+                    to="/products?categories=all"
+                    className="flex justify-between items-center gap-1.5 w-full"
+                  >
+                    View All Categories <ChevronRight />
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link to={"/cart"}>
               <Button variant="ghost" size="icon" className="cursor-pointer">
                 <ShoppingCart className="h-5 w-5" />
