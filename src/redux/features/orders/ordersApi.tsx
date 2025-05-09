@@ -23,11 +23,18 @@ const orderApi = baseApi.injectEndpoints({
     }),
     updateOrderStatus: builder.mutation({
       query: ({ orderId, status }) => {
-        console.log(status, "status");
         return {
           url: `/orders/${orderId}`,
           method: "PATCH",
           body: { status },
+        };
+      },
+    }),
+    calculateRevenue: builder.query({
+      query: () => {
+        return {
+          url: `/orders/revenue/admin`,
+          method: "GET",
         };
       },
     }),
@@ -49,4 +56,5 @@ export const {
   useUpdateOrderStatusMutation,
   useGetOrdersByUserQuery,
   useGetClientSecretMutation,
+  useCalculateRevenueQuery,
 } = orderApi;

@@ -20,11 +20,17 @@ import {
   Package,
   ShoppingCart,
 } from "lucide-react";
+import { useCalculateRevenueQuery } from "@/redux/features/orders/ordersApi";
+import { Skeleton } from "../ui/skeleton";
+import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
 
 export default function WelcomeSection() {
   // You would typically get this from your auth context
   const user = useAppSelector(useCurrentUser) as IUser | null;
   const userName = user?.name;
+  const { data, isLoading } = useCalculateRevenueQuery([]);
+  const { data: products, isLoading: isProductsLoading } =
+    useGetAllProductsQuery([]);
   // const currentHour = new Date().getHours();
 
   // const getGreeting = () => {
@@ -51,11 +57,11 @@ export default function WelcomeSection() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {/* {!isLoading ? (
-                  "$" + sales.toLocaleString() + ".00"
+                {!isLoading ? (
+                  "$" + data.data.totalRevenue.toLocaleString()
                 ) : (
                   <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
-                )} */}
+                )}
               </div>
               <div className="flex items-center text-xs text-green-500">
                 <ArrowUpRight className="mr-1 h-3 w-3" />
@@ -66,17 +72,17 @@ export default function WelcomeSection() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Active Listings
+                Available Products
               </CardTitle>
               <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {/* {!isLoading ? (
-                  listings?.length
+                {!isProductsLoading ? (
+                  products.data.length
                 ) : (
                   <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
-                )} */}
+                )}
               </div>
               <div className="flex items-center text-xs text-green-500">
                 <ArrowUpRight className="mr-1 h-3 w-3" />
@@ -93,11 +99,11 @@ export default function WelcomeSection() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {/* {!isLoading ? (
-                  salesCompleted.length
+                {!isLoading ? (
+                  data.data.totalCompletedOrders
                 ) : (
                   <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
-                )} */}
+                )}
               </div>
               <div className="flex items-center text-xs text-red-500">
                 <ArrowDownRight className="mr-1 h-3 w-3" />
