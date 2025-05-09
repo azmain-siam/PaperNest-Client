@@ -59,7 +59,7 @@ export default function BannerSlider() {
               <img
                 src={slide.image || "/placeholder.svg"}
                 alt={slide.title}
-                className="w-full h-[200px] md:h-[500px] object-cover"
+                className="w-full h-[250px] md:h-[500px] object-cover"
               />
               {/* <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
               <div className="text-center text-white">

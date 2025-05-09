@@ -5,7 +5,7 @@ const features = [
   {
     icon: <Truck className="h-6 w-6" />,
     title: "Free Shipping",
-    description: "On orders over $50",
+    description: "On orders over $30",
   },
   {
     icon: <Shield className="h-6 w-6" />,
