@@ -14,6 +14,7 @@ import { setUser } from "@/redux/features/auth/authSlice";
 import { verifyToken } from "@/utils/verifyToken";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
 // Form types
 type LoginFormData = {
@@ -29,16 +30,25 @@ type RegisterFormData = {
 };
 
 export default function AuthPages() {
+  const adminCredential = {
+    email: "admin@gmail.com",
+    password: "123456",
+  };
+  const userCredential = {
+    email: "user@gmail.com",
+    password: "123456",
+  };
+ 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   // Login form
   const {
     register: registerLogin,
     handleSubmit: handleLoginSubmit,
     formState: { errors: loginErrors },
+    reset,
   } = useForm<LoginFormData>();
 
   // Register form
@@ -114,7 +124,7 @@ export default function AuthPages() {
               onClick={() => setIsLogin(true)}
               className={`flex-1 cursor-pointer p-4 text-center font-medium transition-colors ${
                 isLogin
-                  ? "bg-gray-100 text-gray-900"
+                  ? "bg-secondary text-primary"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -125,7 +135,7 @@ export default function AuthPages() {
               onClick={() => setIsLogin(false)}
               className={`flex-1 cursor-pointer p-4 text-center font-medium transition-colors ${
                 !isLogin
-                  ? "bg-gray-100 text-gray-900"
+                  ? "bg-secondary text-primary"
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
@@ -146,6 +156,23 @@ export default function AuthPages() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
+                    <div className="flex gap-2 items-center">
+                      <h4 className="text-red-500 font-medium text-xs">
+                        For testing purpose:
+                      </h4>
+                      <Badge
+                        onClick={() => reset(userCredential)}
+                        className="text-xs cursor-pointer"
+                      >
+                        User Credential
+                      </Badge>
+                      <Badge
+                        onClick={() => reset(adminCredential)}
+                        className="text-xs cursor-pointer"
+                      >
+                        Admin Credential
+                      </Badge>
+                    </div>
                     <Label htmlFor="login-email">Email</Label>
                     <Input
                       id="login-email"
@@ -187,11 +214,7 @@ export default function AuthPages() {
                     )}
                   </div>
 
-                  <Button
-                    type="submit"
-                    className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-colors cursor-pointer"
-                    disabled={isLoading}
-                  >
+                  <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
@@ -301,11 +324,7 @@ export default function AuthPages() {
                     )}
                   </div> */}
 
-                  <Button
-                    type="submit"
-                    className="w-full bg-gray-900 text-white hover:bg-gray-800 transition-colors cursor-pointer"
-                    disabled={isLoading}
-                  >
+                  <Button className="w-full" type="submit" disabled={isLoading}>
                     {isLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (

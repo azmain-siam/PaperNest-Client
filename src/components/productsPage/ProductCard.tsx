@@ -4,8 +4,30 @@ import placeholder from "@/assets/images/card-placeholder.jpeg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "@/redux/hooks";
+import { useCurrentUser } from "@/redux/features/auth/authSlice";
+import { IUser } from "../shared/Navbar";
+import { useAddToCartMutation } from "@/redux/features/cart/cartApi";
+import { toast } from "sonner";
+import { ShoppingCart } from "lucide-react";
 
 const ProductCard = ({ product }: { product: IProduct }) => {
+  const user = useAppSelector(useCurrentUser) as IUser | null;
+  const [addToCart] = useAddToCartMutation();
+
+  const handleAddToCart = async (productId: string) => {
+    // console.log(data);
+    const cartData = {
+      productId,
+      quantity: 1,
+      userId: user?.id,
+    };
+
+    const { data } = await addToCart(cartData);
+    if (data.statusCode === 201) {
+      toast.success("Product added to cart successfully", { duration: 3000 });
+    }
+  };
   return (
     <motion.div
       key={product._id}
@@ -44,6 +66,13 @@ const ProductCard = ({ product }: { product: IProduct }) => {
         <div className="flex items-center justify-between">
           <Badge variant="secondary">{product.category}</Badge>
           <div className="flex items-center gap-2">
+            <Button
+              onClick={() => handleAddToCart(product._id)}
+              variant={"outline"}
+              className="px-2"
+            >
+              <ShoppingCart />
+            </Button>
             <Button variant="default" size="sm" asChild>
               <Link to={`/products/${product._id}`}>View Details</Link>
             </Button>

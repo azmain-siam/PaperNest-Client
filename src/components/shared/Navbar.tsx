@@ -54,7 +54,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white dark:bg-transparent dark:border-b shadow-sm sticky top-0 z-50">
+    <nav className="bg-white backdrop-blur-2xl dark:bg-transparent dark:border-b shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 ">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -64,7 +64,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             {Navlinks.map((link, idx) => (
               <NavLink
                 key={idx}
@@ -72,8 +72,8 @@ export default function Navbar() {
                 className={({ isActive }) => {
                   // console.log(isActive);
                   return !isActive
-                    ? "text-gray-700 dark:text-gray-300 hover:text-primary"
-                    : "text-primary font-semibold";
+                    ? "text-gray-700 text-sm dark:text-gray-300 hover:text-primary"
+                    : "text-primary font-semibold text-sm";
                 }}
               >
                 {link.name}
@@ -83,7 +83,7 @@ export default function Navbar() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="flex items-center gap-1 p-0 text-base active:ring-0 font-medium text-foreground/60 hover:text-foreground hover:bg-transparent"
+                  className="flex items-center gap-1 p-0 text-sm active:ring-0 text-foreground/60 hover:text-primary hover:bg-transparent"
                 >
                   Categories
                   <ChevronDown className="h-4 w-4" />

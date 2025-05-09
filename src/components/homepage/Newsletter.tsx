@@ -1,3 +1,7 @@
+"use client";
+
+import type React from "react";
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, ArrowRight, CheckCircle2 } from "lucide-react";
@@ -37,9 +41,9 @@ export function NewsletterSection() {
   };
 
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-8">
+    <section className="max-w-7xl py-16 px-4 mx-auto">
       <motion.div
-        className="max-w-4xl mx-auto bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-950 dark:to-pink-950 rounded-2xl p-8 md:p-12 shadow-lg border border-purple-200 dark:border-purple-800"
+        className="bg-gradient-to-r from-[#E55050]/10 to-[#FF7A7A]/20 dark:from-[#E55050]/90 dark:to-[#9D2424] rounded-2xl p-8 md:p-12 shadow-lg border border-[#E55050]/20 dark:border-[#E55050]/50"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -54,7 +58,7 @@ export function NewsletterSection() {
         >
           <motion.div variants={itemVariants} className="mb-2">
             <div className="bg-white dark:bg-slate-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
-              <Mail className="h-8 w-8 text-purple-600" />
+              <Mail className="h-8 w-8 text-[#E55050]" />
             </div>
           </motion.div>
 
@@ -90,7 +94,7 @@ export function NewsletterSection() {
               />
               <Button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 transition-all"
+                className="bg-[#E55050] hover:bg-[#C73A3A] transition-all"
                 disabled={loading}
               >
                 {loading ? (

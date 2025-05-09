@@ -37,7 +37,7 @@ export default function SpecialOffers() {
 
   return (
     <section className="py-10 px-4 bg-gray-50">
-      <div className="max-w-5xl mx-auto text-center space-y-4">
+      <div className="max-w-7xl px-4 mx-auto text-center space-y-4">
         <h2 className="text-3xl font-bold text-gray-800">Special Offers</h2>
         <p className="text-gray-600">
           Use these exclusive coupon codes during checkout and save big!
@@ -54,7 +54,7 @@ export default function SpecialOffers() {
             >
               <Card className="rounded-2xl shadow-sm bg-white hover:shadow-md transition">
                 <CardContent className="p-6 space-y-4">
-                  <span className="text-sm inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full font-medium">
+                  <span className="text-sm inline-block px-3 py-1 bg-secondary text-primary rounded-full font-medium">
                     {offer.tag}
                   </span>
                   <h3 className="text-xl font-semibold text-gray-800">
@@ -63,7 +63,7 @@ export default function SpecialOffers() {
                   <p className="text-gray-500 text-sm">{offer.desc}</p>
 
                   <div className="flex items-center justify-between mt-2 p-2 pl-3 border rounded-md bg-gray-50">
-                    <code className="font-mono text-lg font-bold text-purple-700">
+                    <code className="font-mono text-lg font-bold text-primary">
                       {offer.code}
                     </code>
                     <Button

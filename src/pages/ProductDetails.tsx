@@ -48,7 +48,6 @@ const ProductDetails = () => {
     };
 
     const { data } = await addToCart(cartData);
-    console.log(data, "res");
     if (data.statusCode === 201) {
       toast.success("Product added to cart successfully", { duration: 3000 });
     }

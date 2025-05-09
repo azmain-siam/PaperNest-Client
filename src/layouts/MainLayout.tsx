@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {
   return (
-    <div className="font-primary">
+    <div className="font-primary bg-secondary/5">
       <Navbar />
       <div className="min-h-[calc(100vh-64px)]">
         <Outlet />
