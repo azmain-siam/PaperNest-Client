@@ -304,6 +304,45 @@ export default function Navbar() {
                 </NavLink>
               ))}
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-1 p-0 text-base active:ring-0 text-foreground/60 hover:text-primary hover:bg-transparent"
+                >
+                  Categories
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-[220px] *:py-2"
+              >
+                {categories.map((category) => (
+                  <DropdownMenuItem
+                    className=" hover:bg-primary-second-foreground/80"
+                    key={category.name}
+                  >
+                    <Link
+                      to={category.link}
+                      className="flex items-center gap-1.5 w-full"
+                    >
+                      <category.icon /> {category.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+
+                <DropdownMenuSeparator className="!p-0" />
+                <DropdownMenuItem className="hover:bg-primary-second-foreground/80">
+                  <Link
+                    to="/products"
+                    className="flex justify-between items-center gap-1.5 w-full"
+                  >
+                    View All Categories <ChevronRight />
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <div className="my-2">
               {user ? (
                 <Button
