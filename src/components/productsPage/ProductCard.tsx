@@ -13,7 +13,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       // viewport={{ once: true }}
-      className="group shadow-md hover:shadow-lg rounded-lg dark:border flex flex-col"
+      className="group shadow-md hover:shadow-lg h-full rounded-lg dark:border flex flex-col"
     >
       <div className="relative h-[200px] w-full overflow-hidden rounded-lg rounded-b-none bg-gray-100">
         <img
@@ -27,7 +27,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
           </div>
         )}
       </div>
-      <div className="mt-4 space-y-3 p-3 pt-0 flex-1 flex flex-col justify-between">
+      <div className="mt-4 space-y-3 p-4 pt-0 flex-1 flex flex-col justify-between">
         <div>
           <div className="flex justify-between">
             <h3 className="text-base font-medium">{product.name}</h3>

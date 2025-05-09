@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import SectionHeader from "../ui/section-header";
 
 const blogs = [
   {
@@ -43,17 +44,10 @@ export default function BlogSection() {
   return (
     <section className="py-12 bg-gray-50 dark:bg-transparent">
       <div className="max-w-7xl mx-auto px-4 ">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl font-bold mb-4">Latest from Our Blog</h2>
-          <p className="text-gray-600">
-            Tips, tricks, and inspiration for your creative journey
-          </p>
-        </motion.div>
+        <SectionHeader
+          title="Latest from Our Blog"
+          description="Tips, tricks, and inspiration for your creative journey"
+        />
 
         <motion.div
           variants={container}
