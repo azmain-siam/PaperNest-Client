@@ -16,6 +16,9 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   const [addToCart] = useAddToCartMutation();
 
   const handleAddToCart = async (productId: string) => {
+    if (!user) {
+      toast.warning("You must be logged in or registered to proceed.");
+    }
     // console.log(data);
     const cartData = {
       productId,

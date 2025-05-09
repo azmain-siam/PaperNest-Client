@@ -149,10 +149,11 @@ export default function CartPage() {
 
   const applyCoupon = (code: string) => {
     if (code === "ART20") {
-      setCouponDiscount(20); // 15% discount
+      setCouponDiscount(20);
+      toast.success(`${coupon} coupon applied!`);
     } else if (code === "WELCOME10") {
-      setCouponDiscount(10); // 15% discount
-      // optionally show error/toast
+      setCouponDiscount(10);
+      toast.success(`${coupon} coupon applied!`);
     } else {
       setCouponDiscount(0);
       toast.warning("Not a valid coupon!");
