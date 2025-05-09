@@ -25,13 +25,13 @@ export default function WelcomeSection() {
   // You would typically get this from your auth context
   const user = useAppSelector(useCurrentUser) as IUser | null;
   const userName = user?.name;
-  const currentHour = new Date().getHours();
+  // const currentHour = new Date().getHours();
 
-  const getGreeting = () => {
-    if (currentHour < 12) return "Good morning";
-    if (currentHour < 18) return "Good afternoon";
-    return "Good evening";
-  };
+  // const getGreeting = () => {
+  //   if (currentHour < 12) return "Good morning";
+  //   if (currentHour < 18) return "Good afternoon";
+  //   return "Good evening";
+  // };
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -39,7 +39,7 @@ export default function WelcomeSection() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground">
-            Welcome back! Here&apos;s an overview of your activity.
+            Welcome back, {userName}! Here&apos;s an overview of your activity.
           </p>
         </div>
 

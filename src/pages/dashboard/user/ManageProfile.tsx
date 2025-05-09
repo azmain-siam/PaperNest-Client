@@ -1,4 +1,8 @@
 import { IUser } from "@/components/shared/Navbar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import {
   useGetUserByIdQuery,
@@ -47,57 +51,59 @@ const ManageProfile = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-bold mb-4">User Profile</h2>
-      <div className="mb-4">
-        <p>
-          <strong>Name:</strong> {user?.name}
-        </p>
-        <p>
-          <strong>Email:</strong> {user?.email}
-        </p>
-      </div>
-      <div className="mb-4">
-        <p>
-          <strong>Default Shipping Address:</strong>
-        </p>
-        {editMode ? (
-          <input
-            type="text"
-            value={newAddress}
-            onChange={(e) => setNewAddress(e.target.value)}
-            className="w-full border p-2 rounded-md"
-          />
-        ) : (
-          <p>{userData?.address || "No saved address"}</p>
-        )}
-      </div>
-      <div className="flex gap-2">
-        {editMode ? (
-          <>
-            <button
-              className="bg-green-500 text-white px-4 py-2 rounded-md"
-              onClick={handleSave}
+    <Card className="mx-auto">
+      <CardHeader>
+        <CardTitle className="text-xl">User Profile</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-7">
+        <div>
+          <p>
+            <strong>Name:</strong> {user.name}
+          </p>
+          <p>
+            <strong>Email:</strong> {user.email}
+          </p>
+        </div>
+
+        <div>
+          <Label className="block mb-1">Default Shipping Address</Label>
+          {editMode ? (
+            <Input
+              value={newAddress}
+              onChange={(e) => setNewAddress(e.target.value)}
+              placeholder="Enter your address"
+            />
+          ) : (
+            <p>{userData.address || "No saved address"}</p>
+          )}
+        </div>
+
+        <div className="flex gap-3">
+          {editMode ? (
+            <>
+              <Button
+                onClick={handleSave}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                Save
+              </Button>
+              <Button variant="secondary" onClick={() => setEditMode(false)}>
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <Button
+              onClick={() => {
+                setEditMode(true);
+                setNewAddress(userData.address || "");
+              }}
             >
-              Save
-            </button>
-            <button
-              className="bg-gray-500 text-white px-4 py-2 rounded-md"
-              onClick={() => setEditMode(false)}
-            >
-              Cancel
-            </button>
-          </>
-        ) : (
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-            onClick={() => setEditMode(true)}
-          >
-            Edit Address
-          </button>
-        )}
-      </div>
-    </div>
+              Edit Address
+            </Button>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

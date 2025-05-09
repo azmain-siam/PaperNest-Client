@@ -3,7 +3,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
@@ -13,16 +12,23 @@ import {
   Package,
   ShoppingCart,
   Settings,
+  Home,
 } from "lucide-react";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { IUser } from "../shared/Navbar";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export function AppSidebar() {
   const user = useAppSelector(useCurrentUser) as IUser | null;
 
   const adminNavItems = [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      link: "",
+      icon: Home,
+    },
     { id: "users", label: "Users", link: "users-management", icon: Users },
     {
       id: "products",
@@ -36,9 +42,21 @@ export function AppSidebar() {
       link: "manage-orders",
       icon: ShoppingCart,
     },
+    {
+      id: "profile",
+      label: "Profile",
+      link: "manage-profile",
+      icon: Settings,
+    },
   ];
 
   const userNavItems = [
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      link: "",
+      icon: Home,
+    },
     {
       id: "orders",
       label: "My Orders",
@@ -55,19 +73,29 @@ export function AppSidebar() {
 
   const navItems = user?.role === "admin" ? adminNavItems : userNavItems;
   return (
-    <Sidebar>
+    <Sidebar className="pt-16">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.id}>
-                <SidebarMenuButton asChild>
-                  <Link to={item.link} className="flex items-center gap-2">
-                    <item.icon />
+                <NavLink
+                  end
+                  to={item.link}
+                  className={({ isActive }) =>
+                    !isActive
+                      ? "text-foreground"
+                      : "!bg-primary-second-foreground !text-primary-second hover:!text-primary font-medium"
+                  }
+                >
+                  <SidebarMenuButton
+                    size="lg"
+                    className="cursor-pointer hover:text-primary-second hover:bg-primary-second-foreground/80"
+                  >
+                    <item.icon className="w-5 h-5" />
                     <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
+                  </SidebarMenuButton>
+                </NavLink>
               </SidebarMenuItem>
             ))}
           </SidebarGroupContent>
