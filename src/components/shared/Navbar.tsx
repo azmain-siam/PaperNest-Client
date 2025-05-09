@@ -5,8 +5,14 @@ import {
   User,
   Settings,
   ChevronDown,
-  Sofa,
   ChevronRight,
+  Pencil,
+  Book,
+  Palette,
+  Scissors,
+  Calculator,
+  Gift,
+  Tv,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -93,19 +99,24 @@ export default function Navbar() {
                 align="start"
                 className="w-[220px] *:py-2 *:text-sm"
               >
-                <DropdownMenuItem>
-                  <Link
-                    to="/products?categories=furniture"
-                    className="flex items-center gap-1.5 w-full"
+                {categories.map((category) => (
+                  <DropdownMenuItem
+                    className=" hover:bg-primary-second-foreground/80"
+                    key={category.name}
                   >
-                    <Sofa /> Furniture
-                  </Link>
-                </DropdownMenuItem>
+                    <Link
+                      to={category.link}
+                      className="flex items-center gap-1.5 w-full"
+                    >
+                      <category.icon /> {category.name}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
 
                 <DropdownMenuSeparator className="!p-0" />
-                <DropdownMenuItem>
+                <DropdownMenuItem className="hover:bg-primary-second-foreground/80">
                   <Link
-                    to="/products?categories=all"
+                    to="/products"
                     className="flex justify-between items-center gap-1.5 w-full"
                   >
                     View All Categories <ChevronRight />
@@ -326,5 +337,71 @@ const Navlinks: ILink[] = [
   {
     name: "About",
     href: "/about",
+  },
+];
+
+const categories = [
+  {
+    name: "Writing Supplies",
+    icon: Pencil,
+    description: "Pens, pencils, markers & more",
+    color: "bg-purple-100 dark:bg-purple-950",
+    textColor: "text-purple-800 dark:text-purple-300",
+    borderColor: "border-purple-300 dark:border-purple-800",
+    link: "/products?categories=Writing",
+  },
+  {
+    name: "Notebooks & Paper",
+    icon: Book,
+    description: "Journals, notebooks & paper products",
+    color: "bg-pink-100 dark:bg-pink-950",
+    textColor: "text-pink-800 dark:text-pink-300",
+    borderColor: "border-pink-300 dark:border-pink-800",
+    link: "/products?categories=Educational",
+  },
+  {
+    name: "Art Supplies",
+    icon: Palette,
+    description: "Paints, brushes, canvases & more",
+    color: "bg-blue-100 dark:bg-blue-950",
+    textColor: "text-blue-800 dark:text-blue-300",
+    borderColor: "border-blue-300 dark:border-blue-800",
+    link: "/products?categories=Art Supplies",
+  },
+  {
+    name: "Craft Supplies",
+    icon: Scissors,
+    description: "Scissors, glue, craft paper & more",
+    color: "bg-orange-100 dark:bg-orange-950",
+    textColor: "text-orange-800 dark:text-orange-300",
+    borderColor: "border-orange-300 dark:border-orange-800",
+    link: "/products?categories=Craft",
+  },
+  {
+    name: "Office Supplies",
+    icon: Calculator,
+    description: "Calculators, staplers & organizers",
+    color: "bg-green-100 dark:bg-green-950",
+    textColor: "text-green-800 dark:text-green-300",
+    borderColor: "border-green-300 dark:border-green-800",
+    link: "/products?categories=Office Supplies",
+  },
+  {
+    name: "Gift Items",
+    icon: Gift,
+    description: "Unique stationery gifts & sets",
+    color: "bg-yellow-100 dark:bg-yellow-950",
+    textColor: "text-yellow-800 dark:text-yellow-300",
+    borderColor: "border-yellow-300 dark:border-yellow-800",
+    link: "/products?categories=gift",
+  },
+  {
+    name: "Technology",
+    icon: Tv,
+    description: "Technology items",
+    color: "bg-purple-100 dark:bg-purple-950",
+    textColor: "text-purple-800 dark:text-purple-300",
+    borderColor: "border-purple-300 dark:border-purple-800",
+    link: "/products?categories=Technology",
   },
 ];

@@ -7,6 +7,7 @@ import ProductCard from "@/components/productsPage/ProductCard";
 import FilterSidebar from "@/components/productsPage/FilterSidebar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "react-router-dom";
 
 export interface IProduct {
   _id: string;
@@ -32,6 +33,7 @@ const categories = [
 export default function ProductsPage() {
   const { data } = useGetAllProductsQuery(undefined);
   const products = data?.data;
+  const [searchParams] = useSearchParams();
   // const [products, setProducts] = useState<IProduct[]>(initialProducts);
   const [filteredProducts, setFilteredProducts] =
     useState<IProduct[]>(products);
@@ -41,6 +43,17 @@ export default function ProductsPage() {
   const [showInStock, setShowInStock] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
+  useEffect(() => {
+    const handleSetCategory = () => {
+      const category = searchParams.get("categories");
+      if (category) {
+        setSelectedCategory(category as string);
+      }
+    };
+
+    handleSetCategory();
+  }, [searchParams]);
 
   // Filter products based on all criteria
   useEffect(() => {
@@ -91,12 +104,12 @@ export default function ProductsPage() {
     if (filter === "In Stock Only") {
       setShowInStock(false);
     } else if (filter.includes("$")) {
-      setPriceRange([0, 100]);
+      setPriceRange([0, 1000]);
     } else {
       setSelectedCategory("All Categories");
     }
   };
-
+  console.log(filteredProducts);
   return (
     <div className="max-w-7xl mx-auto px-4  py-12">
       {/* Header and Search */}
@@ -172,7 +185,7 @@ export default function ProductsPage() {
               onClick={() => {
                 setSearchTerm("");
                 setSelectedCategory("All Categories");
-                setPriceRange([0, 100]);
+                setPriceRange([0, 1000]);
                 setShowInStock(false);
               }}
             >

@@ -9,10 +9,12 @@ import {
   Scissors,
   Calculator,
   Gift,
+  Tv,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import SectionHeader from "../ui/section-header";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
@@ -22,6 +24,7 @@ const categories = [
     color: "bg-purple-100 dark:bg-purple-950",
     textColor: "text-purple-800 dark:text-purple-300",
     borderColor: "border-purple-300 dark:border-purple-800",
+    link: "/products?categories=Writing",
   },
   {
     name: "Notebooks & Paper",
@@ -30,6 +33,7 @@ const categories = [
     color: "bg-pink-100 dark:bg-pink-950",
     textColor: "text-pink-800 dark:text-pink-300",
     borderColor: "border-pink-300 dark:border-pink-800",
+    link: "/products?categories=Educational",
   },
   {
     name: "Art Supplies",
@@ -38,6 +42,7 @@ const categories = [
     color: "bg-blue-100 dark:bg-blue-950",
     textColor: "text-blue-800 dark:text-blue-300",
     borderColor: "border-blue-300 dark:border-blue-800",
+    link: "/products?categories=Art Supplies",
   },
   {
     name: "Craft Supplies",
@@ -46,6 +51,7 @@ const categories = [
     color: "bg-orange-100 dark:bg-orange-950",
     textColor: "text-orange-800 dark:text-orange-300",
     borderColor: "border-orange-300 dark:border-orange-800",
+    link: "/products?categories=Craft",
   },
   {
     name: "Office Supplies",
@@ -54,6 +60,7 @@ const categories = [
     color: "bg-green-100 dark:bg-green-950",
     textColor: "text-green-800 dark:text-green-300",
     borderColor: "border-green-300 dark:border-green-800",
+    link: "/products?categories=Office Supplies",
   },
   {
     name: "Gift Items",
@@ -62,6 +69,16 @@ const categories = [
     color: "bg-yellow-100 dark:bg-yellow-950",
     textColor: "text-yellow-800 dark:text-yellow-300",
     borderColor: "border-yellow-300 dark:border-yellow-800",
+    link: "/products?categories=gift",
+  },
+  {
+    name: "Technology",
+    icon: Tv,
+    description: "Technology items",
+    color: "bg-purple-100 dark:bg-purple-950",
+    textColor: "text-purple-800 dark:text-purple-300",
+    borderColor: "border-purple-300 dark:border-purple-800",
+    link: "/products?categories=gift",
   },
 ];
 
@@ -148,13 +165,15 @@ export function CategoriesSection() {
                         {category.description}
                       </p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      className={`w-full mt-4 ${category.textColor}`}
-                    >
-                      Explore
-                      <ChevronRight className="ml-2 h-4 w-4" />
-                    </Button>
+                    <Link to={category.link}>
+                      <Button
+                        variant="ghost"
+                        className={`w-full mt-4 ${category.textColor}`}
+                      >
+                        Explore
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               </motion.div>

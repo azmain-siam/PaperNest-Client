@@ -141,7 +141,7 @@ export default function CartPage() {
     0
   );
   const tax = subtotal * 0.1; // 10% tax
-  const shipping = subtotal > 50 ? 0 : 5.99;
+  const shipping = subtotal > 30 ? 0 : 5.99;
   const total = subtotal + tax + shipping;
 
   const handleSubmit = async () => {
