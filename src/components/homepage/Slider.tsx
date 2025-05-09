@@ -48,7 +48,7 @@ export default function BannerSlider() {
   };
 
   return (
-    <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mt-6 mx-auto">
+    <div className="max-w-7xl px-4  mt-6 mx-auto">
       <div className="relative overflow-hidden rounded-2xl">
         <div
           className="flex transition-transform duration-500 ease-in-out"
@@ -59,7 +59,7 @@ export default function BannerSlider() {
               <img
                 src={slide.image || "/placeholder.svg"}
                 alt={slide.title}
-                className="w-full h-[500px] object-cover"
+                className="w-full h-[250px] md:h-[500px] object-cover"
               />
               {/* <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
               <div className="text-center text-white">

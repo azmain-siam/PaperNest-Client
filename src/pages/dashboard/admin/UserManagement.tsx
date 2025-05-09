@@ -55,49 +55,52 @@ export default function UserManagement() {
         <h2 className="text-2xl font-bold">Users Management</h2>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
-            {/* <TableHead>Join Date</TableHead> */}
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users.map((user) => (
-            <TableRow key={user._id}>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>
-                <Badge
-                  variant={user.role === "admin" ? "default" : "secondary"}
-                >
-                  {user.role}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge
-                  variant={user.status === "active" ? "default" : "destructive"}
-                >
-                  {user.status}
-                </Badge>
-              </TableCell>
-              {/* <TableCell>
+      <div className="border rounded-lg">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Status</TableHead>
+              {/* <TableHead>Join Date</TableHead> */}
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user._id}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant={user.role === "admin" ? "default" : "secondary"}
+                  >
+                    {user.role}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      user.status === "active" ? "default" : "destructive"
+                    }
+                  >
+                    {user.status}
+                  </Badge>
+                </TableCell>
+                {/* <TableCell>
                 {new Date(user.createdAt).toLocaleDateString()}
               </TableCell> */}
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    {/* <DropdownMenuItem
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                      {/* <DropdownMenuItem
                       onClick={() =>
                         (window.location.href = `mailto:${user.email}`)
                       }
@@ -106,33 +109,34 @@ export default function UserManagement() {
                       Send Email
                     </DropdownMenuItem>
                     <DropdownMenuSeparator /> */}
-                    <DropdownMenuItem
-                      onClick={() => toggleUserStatus(user)}
-                      className={
-                        user.status === "active"
-                          ? "text-red-600"
-                          : "text-green-600"
-                      }
-                    >
-                      {user.status === "active" ? (
-                        <>
-                          <UserX className="mr-2 h-4 w-4" />
-                          Deactivate User
-                        </>
-                      ) : (
-                        <>
-                          <UserCheck className="mr-2 h-4 w-4" />
-                          Activate User
-                        </>
-                      )}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                      <DropdownMenuItem
+                        onClick={() => toggleUserStatus(user)}
+                        className={
+                          user.status === "active"
+                            ? "text-red-600"
+                            : "text-green-600"
+                        }
+                      >
+                        {user.status === "active" ? (
+                          <>
+                            <UserX className="mr-2 h-4 w-4" />
+                            Deactivate User
+                          </>
+                        ) : (
+                          <>
+                            <UserCheck className="mr-2 h-4 w-4" />
+                            Activate User
+                          </>
+                        )}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

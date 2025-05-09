@@ -93,7 +93,7 @@ export default function AboutPage() {
 
       {/* Story Section */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 ">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -129,7 +129,7 @@ export default function AboutPage() {
 
       {/* Stats Section */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 ">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -158,7 +158,7 @@ export default function AboutPage() {
 
       {/* Values Section */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 ">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -207,7 +207,7 @@ export default function AboutPage() {
 
       {/* Team Section */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 ">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -262,7 +262,7 @@ export default function AboutPage() {
 
       {/* CTA Section */}
       <section className="py-16 bg-primary text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 ">
           <motion.div
             initial="hidden"
             whileInView="visible"

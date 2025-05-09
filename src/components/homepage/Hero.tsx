@@ -5,7 +5,7 @@ const features = [
   {
     icon: <Truck className="h-6 w-6" />,
     title: "Free Shipping",
-    description: "On orders over $50",
+    description: "On orders over $30",
   },
   {
     icon: <Shield className="h-6 w-6" />,
@@ -42,7 +42,7 @@ const item = {
 export default function Hero() {
   return (
     <section className="py-12 bg-white dark:bg-transparent">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 ">
         <motion.div
           variants={container}
           initial="hidden"

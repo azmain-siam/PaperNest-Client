@@ -7,6 +7,7 @@ import ProductCard from "@/components/productsPage/ProductCard";
 import FilterSidebar from "@/components/productsPage/FilterSidebar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "react-router-dom";
 
 export interface IProduct {
   _id: string;
@@ -32,6 +33,7 @@ const categories = [
 export default function ProductsPage() {
   const { data } = useGetAllProductsQuery(undefined);
   const products = data?.data;
+  const [searchParams] = useSearchParams();
   // const [products, setProducts] = useState<IProduct[]>(initialProducts);
   const [filteredProducts, setFilteredProducts] =
     useState<IProduct[]>(products);
@@ -41,6 +43,17 @@ export default function ProductsPage() {
   const [showInStock, setShowInStock] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
+  useEffect(() => {
+    const handleSetCategory = () => {
+      const category = searchParams.get("categories");
+      if (category) {
+        setSelectedCategory(category as string);
+      }
+    };
+
+    handleSetCategory();
+  }, [searchParams]);
 
   // Filter products based on all criteria
   useEffect(() => {
@@ -91,14 +104,14 @@ export default function ProductsPage() {
     if (filter === "In Stock Only") {
       setShowInStock(false);
     } else if (filter.includes("$")) {
-      setPriceRange([0, 100]);
+      setPriceRange([0, 1000]);
     } else {
       setSelectedCategory("All Categories");
     }
   };
-
+  console.log(filteredProducts);
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4  py-12">
       {/* Header and Search */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
@@ -172,7 +185,7 @@ export default function ProductsPage() {
               onClick={() => {
                 setSearchTerm("");
                 setSelectedCategory("All Categories");
-                setPriceRange([0, 100]);
+                setPriceRange([0, 1000]);
                 setShowInStock(false);
               }}
             >
@@ -182,7 +195,7 @@ export default function ProductsPage() {
         ) : (
           <motion.div
             layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
           >
             {filteredProducts?.map((product) => (
               <ProductCard key={product._id} product={product} />

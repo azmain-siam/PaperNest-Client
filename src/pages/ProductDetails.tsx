@@ -48,7 +48,6 @@ const ProductDetails = () => {
     };
 
     const { data } = await addToCart(cartData);
-    console.log(data, "res");
     if (data.statusCode === 201) {
       toast.success("Product added to cart successfully", { duration: 3000 });
     }
@@ -59,7 +58,7 @@ const ProductDetails = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4  py-12">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Product Images */}
         <motion.div

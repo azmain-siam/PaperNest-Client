@@ -55,8 +55,9 @@ export default function CartPage() {
   const { data } = useGetUserByIdQuery({
     userId: user?.id,
   });
+  const [coupon, setCoupon] = useState("");
   const userData = data?.data;
-
+  const [couponDiscount, setCouponDiscount] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -140,9 +141,23 @@ export default function CartPage() {
       sum + item.productId.price * quantity?.[idx]?.cartQuantity,
     0
   );
-  const tax = subtotal * 0.1; // 10% tax
-  const shipping = subtotal > 50 ? 0 : 5.99;
-  const total = subtotal + tax + shipping;
+  const discountedSubtotal = subtotal - (subtotal * couponDiscount) / 100;
+
+  const tax = discountedSubtotal * 0.1; // 10% tax
+  const shipping = discountedSubtotal > 30 ? 0 : 5.99;
+  const total = discountedSubtotal + tax + shipping;
+
+  const applyCoupon = (code: string) => {
+    if (code === "ART20") {
+      setCouponDiscount(20); // 15% discount
+    } else if (code === "WELCOME10") {
+      setCouponDiscount(10); // 15% discount
+      // optionally show error/toast
+    } else {
+      setCouponDiscount(0);
+      toast.warning("Not a valid coupon!");
+    }
+  };
 
   const handleSubmit = async () => {
     const products = cartItems.map((item, idx) => {
@@ -172,13 +187,13 @@ export default function CartPage() {
       toast.error(errorData?.message);
     }
   };
-
+  console.log(coupon);
   if (isLoading || !quantity) {
     return <Loader />;
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4  py-12">
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -287,8 +302,23 @@ export default function CartPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span
+                      className={
+                        couponDiscount ? "line-through text-gray-400" : ""
+                      }
+                    >
+                      ${subtotal.toFixed(2)}
+                    </span>
                   </div>
+
+                  {couponDiscount > 0 && (
+                    <div className="flex justify-between">
+                      <span>Discounted Subtotal</span>
+                      <span className="text-green-600 font-semibold">
+                        ${discountedSubtotal.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span>Tax (10%)</span>
                     <span>${tax.toFixed(2)}</span>
@@ -302,6 +332,19 @@ export default function CartPage() {
                   <div className="border-t pt-2 font-medium flex justify-between">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="coupon">Coupon Code</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="coupon"
+                      placeholder="Enter coupon code"
+                      onChange={(e) => setCoupon(e.target.value)}
+                      value={coupon}
+                    />
+                    <Button onClick={() => applyCoupon(coupon)}>Apply</Button>
                   </div>
                 </div>
 

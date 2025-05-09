@@ -84,7 +84,7 @@ const FilterSidebar = ({
               </Label>
               <Slider
                 min={0}
-                max={100}
+                max={1000}
                 step={1}
                 value={priceRange}
                 onValueChange={setPriceRange}
@@ -108,7 +108,7 @@ const FilterSidebar = ({
               variant="outline"
               onClick={() => {
                 setSelectedCategory("All Categories");
-                setPriceRange([0, 100]);
+                setPriceRange([0, 1000]);
                 setShowInStock(false);
               }}
             >
