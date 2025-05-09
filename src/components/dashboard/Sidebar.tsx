@@ -13,11 +13,13 @@ import {
   ShoppingCart,
   Settings,
   Home,
+  HomeIcon,
 } from "lucide-react";
 import { useAppSelector } from "@/redux/hooks";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { IUser } from "../shared/Navbar";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { Button } from "../ui/button";
 
 export function AppSidebar() {
   const user = useAppSelector(useCurrentUser) as IUser | null;
@@ -74,7 +76,7 @@ export function AppSidebar() {
   const navItems = user?.role === "admin" ? adminNavItems : userNavItems;
   return (
     <Sidebar className="pt-16">
-      <SidebarContent>
+      <SidebarContent className="flex flex-col justify-between">
         <SidebarGroup>
           <SidebarGroupContent>
             {navItems.map((item) => (
@@ -99,6 +101,14 @@ export function AppSidebar() {
               </SidebarMenuItem>
             ))}
           </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <Link to={"/"}>
+            <Button className="w-full">
+              <HomeIcon />
+              Back to home
+            </Button>
+          </Link>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>

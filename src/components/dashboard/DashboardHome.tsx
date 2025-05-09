@@ -4,25 +4,22 @@ import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { motion } from "framer-motion";
 import { IUser } from "../shared/Navbar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ArrowDownRight,
   ArrowUpRight,
-  BarChart3,
   DollarSign,
   Package,
   ShoppingCart,
 } from "lucide-react";
-import { useCalculateRevenueQuery } from "@/redux/features/orders/ordersApi";
+import {
+  useCalculateRevenueQuery,
+  useGetOrdersByUserQuery,
+} from "@/redux/features/orders/ordersApi";
 import { Skeleton } from "../ui/skeleton";
 import { useGetAllProductsQuery } from "@/redux/features/products/productsApi";
+import { useEffect, useState } from "react";
+import { IOrder } from "@/pages/dashboard/admin/OrderManagement";
 
 export default function WelcomeSection() {
   // You would typically get this from your auth context
@@ -31,6 +28,11 @@ export default function WelcomeSection() {
   const { data, isLoading } = useCalculateRevenueQuery([]);
   const { data: products, isLoading: isProductsLoading } =
     useGetAllProductsQuery([]);
+
+  const { data: orders, isLoading: ordersLoading } = useGetOrdersByUserQuery(
+    user?.id
+  );
+  const [completedOrders, setCompletedOrders] = useState(0);
   // const currentHour = new Date().getHours();
 
   // const getGreeting = () => {
@@ -38,6 +40,20 @@ export default function WelcomeSection() {
   //   if (currentHour < 18) return "Good afternoon";
   //   return "Good evening";
   // };
+
+  useEffect(() => {
+    const calculateCompletedOrders = () => {
+      const delivered = orders?.data?.filter(
+        (order: IOrder) => order.status === "delivered"
+      );
+
+      setCompletedOrders(delivered?.length);
+    };
+
+    if (user?.role === "user") {
+      calculateCompletedOrders();
+    }
+  }, [orders?.data, user?.role]);
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -50,70 +66,121 @@ export default function WelcomeSection() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Sales</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {!isLoading ? (
-                  "$" + data.data.totalRevenue.toLocaleString()
-                ) : (
-                  <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
-                )}
-              </div>
-              <div className="flex items-center text-xs text-green-500">
-                <ArrowUpRight className="mr-1 h-3 w-3" />
-                <span>+12.5% from last month</span>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Available Products
-              </CardTitle>
-              <Package className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {!isProductsLoading ? (
-                  products.data.length
-                ) : (
-                  <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
-                )}
-              </div>
-              <div className="flex items-center text-xs text-green-500">
-                <ArrowUpRight className="mr-1 h-3 w-3" />
-                <span>+2 new this week</span>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Completed Sales
-              </CardTitle>
-              <ShoppingCart className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {!isLoading ? (
-                  data.data.totalCompletedOrders
-                ) : (
-                  <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
-                )}
-              </div>
-              <div className="flex items-center text-xs text-red-500">
-                <ArrowDownRight className="mr-1 h-3 w-3" />
-                <span>-1 from last month</span>
-              </div>
-            </CardContent>
-          </Card>
+          {user?.role === "admin" ? (
+            <>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total Sales
+                  </CardTitle>
+                  <DollarSign className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {!isLoading ? (
+                      "$" + data.data.totalRevenue.toLocaleString()
+                    ) : (
+                      <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
+                    )}
+                  </div>
+                  <div className="flex items-center text-xs text-green-500">
+                    <ArrowUpRight className="mr-1 h-3 w-3" />
+                    <span>+12.5% from last month</span>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Available Products
+                  </CardTitle>
+                  <Package className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {!isProductsLoading ? (
+                      products.data.length
+                    ) : (
+                      <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
+                    )}
+                  </div>
+                  <div className="flex items-center text-xs text-green-500">
+                    <ArrowUpRight className="mr-1 h-3 w-3" />
+                    <span>+2 new this week</span>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Completed Sales
+                  </CardTitle>
+                  <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {!isLoading ? (
+                      data.data.totalCompletedOrders
+                    ) : (
+                      <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
+                    )}
+                  </div>
+                  <div className="flex items-center text-xs text-red-500">
+                    <ArrowDownRight className="mr-1 h-3 w-3" />
+                    <span>-1 from last month</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          ) : (
+            <>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total Orders
+                  </CardTitle>
+                  <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {!ordersLoading ? (
+                      orders.data.length
+                    ) : (
+                      <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
+                    )}
+                  </div>
+                  {/* <div className="flex items-center text-xs text-red-500">
+               <ArrowDownRight className="mr-1 h-3 w-3" />
+               <span>-1 from last month</span>
+             </div> */}
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total Completed Orders
+                  </CardTitle>
+                  <ShoppingCart className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {!ordersLoading ? (
+                      completedOrders
+                    ) : (
+                      <Skeleton className="w-[50px] h-[25px] rounded-full mb-2 bg-gray-200" />
+                    )}
+                  </div>
+                  {/* <div className="flex items-center text-xs text-red-500">
+               <ArrowDownRight className="mr-1 h-3 w-3" />
+               <span>-1 from last month</span>
+             </div> */}
+                </CardContent>
+              </Card>
+            </>
+          )}
         </div>
 
-        <Tabs defaultValue="overview" className="space-y-4">
+        {/* <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -202,7 +269,7 @@ export default function WelcomeSection() {
               </p>
             </div>
           </TabsContent>
-        </Tabs>
+        </Tabs> */}
       </div>
     </motion.div>
   );

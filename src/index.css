@@ -17,10 +17,10 @@
   --popover-foreground: hsl(222.2 84% 4.9%);
   --primary-second: #e55050;
   --primary-second-foreground: hsl(0, 100%, 97%);
-  --primary: hsl(222.2 47.4% 11.2%);
+  --primary: #e55050;
   --primary-foreground: hsl(210 40% 98%);
-  --secondary: hsl(210 40% 96.1%);
-  --secondary-foreground: hsl(222.2 47.4% 11.2%);
+  --secondary: hsl(0, 100%, 97%);
+  --secondary-foreground: hsl(0, 50%, 30%);
   --muted: hsl(210 40% 96.1%);
   --muted-foreground: hsl(215.4 16.3% 46.9%);
   --accent: hsl(210 40% 96.1%);
@@ -63,10 +63,11 @@
   --popover-foreground: hsl(210 40% 98%);
   --primary-second: #e55050;
   --primary-second-foreground: hsl(0, 30%, 20%);
-  --primary: hsl(210 40% 98%);
-  --primary-foreground: hsl(222.2 47.4% 11.2%);
-  --secondary: hsl(217.2 32.6% 17.5%);
-  --secondary-foreground: hsl(210 40% 98%);
+  --primary: #e55050;
+  --primary-foreground: hsl(0 0% 100%);
+
+  --secondary: hsl(0, 30%, 20%);
+  --secondary-foreground: hsl(0 40% 90%);
   --muted: hsl(217.2 32.6% 17.5%);
   --muted-foreground: hsl(215 20.2% 65.1%);
   --accent: hsl(217.2 32.6% 17.5%);

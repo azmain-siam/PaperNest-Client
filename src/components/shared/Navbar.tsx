@@ -22,8 +22,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/components/ui/themeProvider";
+// import { Moon, Sun } from "lucide-react";
+// import { useTheme } from "@/components/ui/themeProvider";
 import { toast } from "sonner";
 
 interface ILink {
@@ -44,7 +44,7 @@ export interface IUser {
 }
 
 export default function Navbar() {
-  const { setTheme } = useTheme();
+  // const { setTheme } = useTheme();
   const dispatch = useAppDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useAppSelector(useCurrentUser) as IUser | null;
@@ -178,7 +178,7 @@ export default function Navbar() {
               </Link>
             )}
 
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon">
                   <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -197,14 +197,19 @@ export default function Navbar() {
                   System
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
+            <Link to={"/cart"}>
+              <Button variant="ghost" size="icon" className="cursor-pointer">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="sr-only">Shopping cart</span>
+              </Button>
+            </Link>
             <Button
               variant="ghost"
-              className="bg-red-600"
               size="icon"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -228,12 +233,20 @@ export default function Navbar() {
                   className={({ isActive }) =>
                     !isActive
                       ? "block px-3 py-2 text-gray-700 hover:text-primary"
-                      : "text-primary font-semibold"
+                      : "text-primary font-semibold block px-3 py-2"
                   }
                 >
                   {link.name}
                 </NavLink>
               ))}
+            </div>
+            <div className="px-2">
+              <Button
+                onClick={handleLogout}
+                className="cursor-pointer w-full my-2"
+              >
+                Logout
+              </Button>
             </div>
           </div>
         )}
