@@ -154,6 +154,9 @@ export default function CartPage() {
     } else if (code === "WELCOME10") {
       setCouponDiscount(10);
       toast.success(`${coupon} coupon applied!`);
+    } else if (code === "STUDENT15") {
+      setCouponDiscount(15);
+      toast.success(`${coupon} coupon applied!`);
     } else {
       setCouponDiscount(0);
       toast.warning("Not a valid coupon!");

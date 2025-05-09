@@ -8,10 +8,10 @@ import { Copy } from "lucide-react";
 
 const offers = [
   {
-    title: "Free Shipping Over $30",
-    desc: "Skip the delivery fee on all orders above $30",
+    title: "15% Off for Students",
+    desc: "Show your student ID and save 15%.",
     tag: "Limited Time",
-    code: "FREESHIP30",
+    code: "STUDENT15",
   },
   {
     title: "Flat 20% Off",
