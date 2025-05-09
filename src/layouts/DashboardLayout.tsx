@@ -1,23 +1,22 @@
+import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Outlet } from "react-router-dom";
 
 export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50 font-primary">
       {/* Top Navigation */}
-      <DashboardHeader />
-
-      <div className="flex">
-        <div className="md:relative h-full">
-          <DashboardSidebar />
-        </div>
-
-        {/* Main Content */}
-        <main className="flex-1 py-6 pr-8 ml-0 md:ml-64 lg:ml-72">
-          <Outlet />
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="w-full">
+          <DashboardHeader />
+          <SidebarTrigger />
+          <div className="p-4">
+            <Outlet />
+          </div>
         </main>
-      </div>
+      </SidebarProvider>
     </div>
   );
 }
