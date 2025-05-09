@@ -82,7 +82,7 @@ export function CategoriesSection() {
 
   return (
     <section className="py-16 px-4 overflow-hidden">
-      <div className="container max-w-7xl px-4 mx-auto">
+      <div className="container max-w-7xl mx-auto">
         <SectionHeader
           title="Shop by Category"
           description="Discover our wide range of stationery products organized by category

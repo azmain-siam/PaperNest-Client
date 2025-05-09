@@ -37,7 +37,7 @@ export default function SpecialOffers() {
 
   return (
     <section className="py-10 px-4 bg-gray-50">
-      <div className="max-w-7xl px-4 mx-auto text-center space-y-4">
+      <div className="max-w-7xl mx-auto text-center space-y-4">
         <h2 className="text-3xl font-bold text-gray-800">Special Offers</h2>
         <p className="text-gray-600">
           Use these exclusive coupon codes during checkout and save big!

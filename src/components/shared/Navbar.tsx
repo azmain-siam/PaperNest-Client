@@ -202,6 +202,59 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
+            {user && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-9 w-9 rounded-full border cursor-pointer"
+                  >
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage
+                        src="https://i.ibb.co.com/vkcW97y/dummy-man-570x570-1-2.png"
+                        alt="User avatar"
+                      />
+                      <AvatarFallback>UN</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-56 font-primary"
+                  align="end"
+                  forceMount
+                >
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1.5">
+                      <p className="font-medium leading-none">{user.name}</p>
+                      <p className="text-sm leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  <Link to={"/dashboard"}>
+                    <DropdownMenuItem>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </DropdownMenuItem>
+                  </Link>
+                  <DropdownMenuSeparator />
+
+                  <div className="px-2">
+                    <Button
+                      onClick={handleLogout}
+                      className="cursor-pointer w-full my-2"
+                    >
+                      Logout
+                    </Button>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
             <Link to={"/cart"}>
               <Button variant="ghost" size="icon" className="cursor-pointer">
                 <ShoppingCart className="h-5 w-5" />
@@ -224,29 +277,35 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1">
+          <div className="md:hidden p-4 border-t">
+            <div className="space-y-1">
               {Navlinks.map((link, idx) => (
                 <NavLink
                   to={link.href}
                   key={idx}
                   className={({ isActive }) =>
                     !isActive
-                      ? "block px-3 py-2 text-gray-700 hover:text-primary"
-                      : "text-primary font-semibold block px-3 py-2"
+                      ? "block py-2 text-gray-700 hover:text-primary"
+                      : "text-primary font-semibold block py-2"
                   }
                 >
                   {link.name}
                 </NavLink>
               ))}
             </div>
-            <div className="px-2">
-              <Button
-                onClick={handleLogout}
-                className="cursor-pointer w-full my-2"
-              >
-                Logout
-              </Button>
+            <div className="my-2">
+              {user ? (
+                <Button
+                  onClick={handleLogout}
+                  className="cursor-pointer w-full"
+                >
+                  Logout
+                </Button>
+              ) : (
+                <Link to={"/auth"}>
+                  <Button className="cursor-pointer w-full">Login</Button>
+                </Link>
+              )}
             </div>
           </div>
         )}
